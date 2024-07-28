@@ -91,7 +91,7 @@ namespace Proyecto1.Datos
                 editarProducto.Cantidad = producto.Cantidad;
 
             }
-            controladorArchivo.guardarClientes(clientes, archivoClientes);
+            controladorArchivo.guardarProductos(productos, archivoProductos);
         }
         public static void ActualizarClientes ()
         {
