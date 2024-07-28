@@ -114,6 +114,7 @@
             txteditarprecio.Name = "txteditarprecio";
             txteditarprecio.Size = new Size(217, 29);
             txteditarprecio.TabIndex = 7;
+            txteditarprecio.KeyPress += txteditarprecio_KeyPress;
             // 
             // txteditarcantidad
             // 
@@ -122,6 +123,7 @@
             txteditarcantidad.Name = "txteditarcantidad";
             txteditarcantidad.Size = new Size(217, 29);
             txteditarcantidad.TabIndex = 8;
+            txteditarcantidad.KeyPress += txteditarcantidad_KeyPress;
             // 
             // btneditardatos
             // 

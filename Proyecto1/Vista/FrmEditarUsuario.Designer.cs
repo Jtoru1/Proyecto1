@@ -142,6 +142,7 @@
             txteditartelefono.Size = new Size(208, 29);
             txteditartelefono.TabIndex = 9;
             txteditartelefono.TextChanged += textBox4_TextChanged;
+            txteditartelefono.KeyPress += txteditartelefono_KeyPress;
             // 
             // txteditarcorreo
             // 

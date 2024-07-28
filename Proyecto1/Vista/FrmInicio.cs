@@ -57,5 +57,12 @@ namespace Proyecto1.Vista
             var nuevaPantalla = new FrmFacturacion();
             nuevaPantalla.Show();
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
+            var nuevaPantalla = new FrmReporte();
+            nuevaPantalla.Show();
+        }
     }
 }

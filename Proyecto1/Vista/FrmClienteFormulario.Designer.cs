@@ -53,7 +53,6 @@
             label1.Size = new Size(200, 25);
             label1.TabIndex = 0;
             label1.Text = "AGREGAR USUARIOS";
-         
             // 
             // label2
             // 
@@ -66,7 +65,6 @@
             label2.Size = new Size(201, 25);
             label2.TabIndex = 1;
             label2.Text = "INGRESE EL NOMBRE";
-          
             // 
             // label3
             // 
@@ -92,7 +90,6 @@
             label4.Size = new Size(223, 25);
             label4.TabIndex = 3;
             label4.Text = "INGRESE LA DIRECCIÓN";
-            
             // 
             // label5
             // 
@@ -105,7 +102,6 @@
             label5.Size = new Size(214, 25);
             label5.TabIndex = 4;
             label5.Text = "INGRESE EL TELÉFONO";
-           
             // 
             // label6
             // 
@@ -118,7 +114,6 @@
             label6.Size = new Size(194, 25);
             label6.TabIndex = 5;
             label6.Text = "INGRESE EL CORREO";
-            
             // 
             // txtnombre
             // 
@@ -126,7 +121,6 @@
             txtnombre.Name = "txtnombre";
             txtnombre.Size = new Size(201, 33);
             txtnombre.TabIndex = 6;
-          
             // 
             // txtapellido
             // 
@@ -134,7 +128,6 @@
             txtapellido.Name = "txtapellido";
             txtapellido.Size = new Size(201, 33);
             txtapellido.TabIndex = 7;
-            
             // 
             // txtdireccion
             // 
@@ -142,7 +135,6 @@
             txtdireccion.Name = "txtdireccion";
             txtdireccion.Size = new Size(201, 33);
             txtdireccion.TabIndex = 8;
-           
             // 
             // txttelefono
             // 
@@ -151,6 +143,7 @@
             txttelefono.Size = new Size(201, 33);
             txttelefono.TabIndex = 9;
             txttelefono.TextChanged += textBox4_TextChanged;
+            txttelefono.KeyPress += txttelefono_KeyPress;
             // 
             // txtcorreo
             // 

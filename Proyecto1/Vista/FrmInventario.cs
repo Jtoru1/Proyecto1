@@ -115,7 +115,7 @@ namespace Proyecto1.Vista
 
                     listView1.Items.Remove(item);
                 }
-
+                controladorProducto.ActualizarListaProducto();
                 MessageBox.Show("Producto eliminado exitosamente.");
             }
             else

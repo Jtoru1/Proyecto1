@@ -123,5 +123,60 @@ namespace Proyecto1.Controlador
             }
             return result;
         }
+             
+            public static string ObtenerRutaRaizProyecto()
+            {
+                var currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                var projectDirectory = Directory.GetParent(currentDirectory).Parent.Parent.Parent.FullName;
+                return projectDirectory;
+            }
+        
+
+        public void guardarClientes (List<Cliente> clientes, string path)
+        {
+            try
+            {             
+                string rutaProyecto = ObtenerRutaRaizProyecto();
+                string rutaArchivo = Path.Combine(rutaProyecto, path);                
+                using (var writer = new StreamWriter(rutaArchivo, false, Encoding.UTF8))
+                {                   
+
+                    // Escribir cada producto
+                    foreach (var cliente in clientes)
+                    {
+                        writer.WriteLine($"{cliente.Id},{cliente.Nombre},{cliente.Apellido},{cliente.Direccion},{cliente.Numero},{cliente.Correo}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error inesperado: {ex.Message}");
+                MessageBox.Show("Error al guardar el archivo." + ex.Message);
+            }
+
+        }
+        public void guardarProductos(List<Producto> productos, string path)
+        {
+            try
+            {
+                string rutaProyecto = ObtenerRutaRaizProyecto();
+                string rutaArchivo = Path.Combine(rutaProyecto, path);
+                using (var writer = new StreamWriter(rutaArchivo, false, Encoding.UTF8))
+                {
+
+                    // Escribir cada producto
+                    foreach (var producto in productos)
+                    {
+                        writer.WriteLine($"{producto.Id},{producto.Nombre},{producto.Descripcion},{producto.Precio},{producto.Cantidad}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error inesperado: {ex.Message}");
+                MessageBox.Show("Error al guardar el archivo." + ex.Message);
+            }
+
+        }
     }
 }

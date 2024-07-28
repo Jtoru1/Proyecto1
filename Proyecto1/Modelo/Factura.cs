@@ -10,11 +10,12 @@ namespace Proyecto1.Modelo
     public class Factura
     {
         public int Id { get; set; }
-        public Cliente Cliente { get; set; }
+        public string IdCliente { get; set; }
         public DateTime Fecha { get; set; }
         public List<Venta> Ventas { get; set; }
         public TipoPago MetodoPago { get; set; }
         public double Total => Ventas.Sum(v => v.Total);
+        public string IdVendedor { get; set; }  
 
         public Factura()
         {

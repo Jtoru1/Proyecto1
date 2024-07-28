@@ -49,7 +49,7 @@ namespace Proyecto1.Vista
                 string.IsNullOrWhiteSpace(descripcion) ||
                 string.IsNullOrWhiteSpace(precio) ||
                 string.IsNullOrWhiteSpace(cantidad))
-              
+
             {
                 MessageBox.Show("Todos los campos son obligatorios. Por favor, complete todos los campos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -60,7 +60,7 @@ namespace Proyecto1.Vista
                 Id = this.productoPorEditar.Id,
                 Nombre = nombre,
                 Descripcion = descripcion,
-                Precio = Utilidades.Utilidades.StrToDoubleConDefault(precio,0),
+                Precio = Utilidades.Utilidades.StrToDoubleConDefault(precio, 0),
                 Cantidad = Utilidades.Utilidades.StrToIntConDefault(cantidad, 0)
 
 
@@ -69,6 +69,28 @@ namespace Proyecto1.Vista
             var pantallaCliente = new FrmInventario();
             pantallaCliente.Show();
             this.Hide();
+        }
+
+        private void txteditarprecio_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+
+
+            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txteditarcantidad_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
         }
     }
 }

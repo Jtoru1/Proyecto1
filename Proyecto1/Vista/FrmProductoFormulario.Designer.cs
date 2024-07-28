@@ -114,6 +114,8 @@
             txtprecio.Name = "txtprecio";
             txtprecio.Size = new Size(257, 25);
             txtprecio.TabIndex = 7;
+            txtprecio.TextChanged += txtprecio_TextChanged;
+            txtprecio.KeyPress += txtprecio_KeyPress;
             // 
             // txtcantidad
             // 
@@ -122,6 +124,8 @@
             txtcantidad.Name = "txtcantidad";
             txtcantidad.Size = new Size(257, 25);
             txtcantidad.TabIndex = 8;
+            txtcantidad.TextChanged += txtcantidad_TextChanged;
+            txtcantidad.KeyPress += txtcantidad_KeyPress;
             // 
             // btnregistrar
             // 

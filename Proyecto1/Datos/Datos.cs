@@ -3,6 +3,7 @@ using Proyecto1.Modelo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,14 +34,14 @@ namespace Proyecto1.Datos
         {
             cliente.Id = IdUsuario();
             clientes.Add(cliente);
-            
+            controladorArchivo.guardarClientes(clientes, archivoClientes);
 
         }
         public static void AgregarProducto(Producto producto)
         {
             producto.Id = IdProducto();
             productos.Add(producto);
-
+            controladorArchivo.guardarProductos(productos, archivoProductos);
 
         }
         private static int IdUsuario()
@@ -51,7 +52,7 @@ namespace Proyecto1.Datos
             }
             else
             {
-                return 1; // Si la lista está vacía, el primer ID será 1
+                return 1; 
             }
         }
         private static int IdProducto()
@@ -62,7 +63,7 @@ namespace Proyecto1.Datos
             }
             else
             {
-                return 1; // Si la lista está vacía, el primer ID será 1
+                return 1; 
             }
         }
         public static void EditarCliente(Cliente cliente)
@@ -75,8 +76,9 @@ namespace Proyecto1.Datos
                 editarCliente.Direccion = cliente.Direccion;
                 editarCliente.Numero = cliente.Numero;
                 editarCliente.Correo = cliente.Correo;
-            }
 
+            }
+            controladorArchivo.guardarClientes(clientes, archivoClientes);
         }
         public static void EditarProducto(Producto producto)
         {
@@ -89,7 +91,15 @@ namespace Proyecto1.Datos
                 editarProducto.Cantidad = producto.Cantidad;
 
             }
-
+            controladorArchivo.guardarClientes(clientes, archivoClientes);
+        }
+        public static void ActualizarClientes ()
+        {
+            controladorArchivo.guardarClientes(clientes,archivoClientes);
+        }
+        public static void ActualizarProductos()
+        {
+            controladorArchivo.guardarProductos(productos, archivoProductos);
         }
         public static Cliente ObtenerClientePorId (int id)
         {

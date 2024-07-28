@@ -33,6 +33,7 @@
             txtcontrasena = new TextBox();
             label2 = new Label();
             btninicio = new Button();
+            label1 = new Label();
             SuspendLayout();
             // 
             // lbCorreo
@@ -85,12 +86,24 @@
             btninicio.UseVisualStyleBackColor = true;
             btninicio.Click += btninicio_Click;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
+            label1.ForeColor = SystemColors.Control;
+            label1.Location = new Point(249, 27);
+            label1.Name = "label1";
+            label1.Size = new Size(260, 30);
+            label1.TabIndex = 5;
+            label1.Text = "SISTEMA DE FERRETERÍA";
+            // 
             // FrmLogin
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Teal;
             ClientSize = new Size(771, 591);
+            Controls.Add(label1);
             Controls.Add(btninicio);
             Controls.Add(label2);
             Controls.Add(txtcontrasena);
@@ -110,5 +123,6 @@
         private TextBox txtcontrasena;
         private Label label2;
         private Button btninicio;
+        private Label label1;
     }
 }

@@ -21,6 +21,9 @@ namespace Proyecto1.Controlador
             return Datos2.ObtenerClientePorId(id);
         }
 
-
+        public  void ActualizarListaCliente ()
+        {
+           Datos2.ActualizarClientes();
+        }
     }
 }

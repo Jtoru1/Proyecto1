@@ -82,6 +82,8 @@
             txtcantidad.Name = "txtcantidad";
             txtcantidad.Size = new Size(100, 35);
             txtcantidad.TabIndex = 4;
+            txtcantidad.TextChanged += txtcantidad_TextChanged;
+            txtcantidad.KeyPress += txtcantidad_KeyPress;
             // 
             // label2
             // 

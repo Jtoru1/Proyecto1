@@ -115,7 +115,7 @@ namespace Proyecto1.Vista
 
                     listView1.Items.Remove(item);
                 }
-
+                controladorCliente.ActualizarListaCliente();
                 MessageBox.Show("Cliente eliminado exitosamente.");
             }
             else

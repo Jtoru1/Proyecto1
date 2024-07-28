@@ -43,7 +43,7 @@
             btnAgregar.Name = "btnAgregar";
             btnAgregar.Size = new Size(167, 63);
             btnAgregar.TabIndex = 1;
-            btnAgregar.Text = "Agregar Nuevo Usuario";
+            btnAgregar.Text = "Agregar Nuevo Cliente";
             btnAgregar.UseVisualStyleBackColor = true;
             btnAgregar.Click += btnAgregar_Click;
             // 
@@ -84,9 +84,9 @@
             label2.ForeColor = SystemColors.Control;
             label2.Location = new Point(294, 22);
             label2.Name = "label2";
-            label2.Size = new Size(239, 32);
+            label2.Size = new Size(228, 32);
             label2.TabIndex = 5;
-            label2.Text = "LISTA DE USUARIOS";
+            label2.Text = "LISTA DE CLIENTES";
             // 
             // listView1
             // 

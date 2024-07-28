@@ -19,13 +19,13 @@ namespace Proyecto1.Vista
         public FrmEditarUsuario(Cliente cliente)
         {
             InitializeComponent();
-            clientePorEditar = cliente;   
+            clientePorEditar = cliente;
             controladorEditarCliente = new ControladorEditarCliente();
             txteditarnombre.Text = cliente.Nombre;
-            txteditarapellido.Text=cliente.Apellido;
-            txteditardireccion.Text=cliente.Direccion;
-            txteditartelefono.Text=cliente.Numero;
-            txteditarcorreo.Text=cliente.Correo;     
+            txteditarapellido.Text = cliente.Apellido;
+            txteditardireccion.Text = cliente.Direccion;
+            txteditartelefono.Text = cliente.Numero;
+            txteditarcorreo.Text = cliente.Correo;
         }
 
         private void FrmEditarUsuario_Load(object sender, EventArgs e)
@@ -65,10 +65,10 @@ namespace Proyecto1.Vista
                 MessageBox.Show("Todos los campos son obligatorios. Por favor, complete todos los campos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-           
+
             Cliente clientePorEditar = new Cliente
             {
-                Id=this.clientePorEditar.Id,
+                Id = this.clientePorEditar.Id,
                 Nombre = nombre,
                 Apellido = apellido,
                 Direccion = direccion,
@@ -81,6 +81,14 @@ namespace Proyecto1.Vista
             pantallaCliente.Show();
             this.Hide();
 
+        }
+
+        private void txteditartelefono_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
         }
     }
 }

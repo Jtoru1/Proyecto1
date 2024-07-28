@@ -36,5 +36,9 @@ namespace Proyecto1.Controlador
                     return " Unidades normales";
             }
         }
+        public void ActualizarListaProducto()
+        {
+            Datos2.ActualizarProductos();
+        }
     }
 }

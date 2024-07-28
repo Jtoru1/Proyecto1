@@ -73,7 +73,7 @@ namespace Proyecto1.Vista
 
             listView1.View = View.Details;
             listView1.Items.Clear();
-            listView1.Columns.Clear();  
+            listView1.Columns.Clear();
             listView1.Columns.Add("ID", 50);
             listView1.Columns.Add("Producto", 100);
             listView1.Columns.Add("Cantidad", 100);
@@ -127,6 +127,19 @@ namespace Proyecto1.Vista
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void txtcantidad_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtcantidad_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
         }
     }
 }
