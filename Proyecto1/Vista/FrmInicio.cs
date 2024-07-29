@@ -24,7 +24,7 @@ namespace Proyecto1.Vista
 
         private void FrmInicio_Load(object sender, EventArgs e)
         {
-            lbCajero.Text = $"Bienvenido {cajero.Nombre}";
+            lbCajero.Text = $"Cajero {cajero.Nombre}";
         }
         private void FrmInicio_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -54,7 +54,7 @@ namespace Proyecto1.Vista
 
         private void btnInventarios_Click(object sender, EventArgs e)
         {
-            var nuevaPantalla = new FrmFacturacion();
+            var nuevaPantalla = new FrmFacturacion(this.cajero);
             nuevaPantalla.Show();
         }
 

@@ -20,6 +20,7 @@ namespace Proyecto1.Datos
         public static List<Factura> facturas = new List<Factura>();
         private static string archivoClientes = "clientes.csv";
         private static string archivoProductos = "productos.csv";
+        private static string archivoFacturas = "ventas.csv";
         static Datos2 ()
         {
             CargarDatos();
@@ -29,6 +30,7 @@ namespace Proyecto1.Datos
             cajeros = controladorArchivo.CargarCajeros(nombreArchivo);
             clientes = controladorArchivo.CargarClientes(archivoClientes);
             productos= controladorArchivo.CargarProductos(archivoProductos);
+            facturas=controladorArchivo.CargarFacturas(archivoFacturas);
         }
         public static void AgregarCliente(Cliente cliente)
         {
@@ -66,6 +68,18 @@ namespace Proyecto1.Datos
                 return 1; 
             }
         }
+        private static int IdFactura()
+        {
+            if (facturas.Any())
+            {
+                return facturas.Max(c => c.Id) + 1;
+            }
+            else
+            {
+                return 1;
+            }
+        }
+
         public static void EditarCliente(Cliente cliente)
         {
             var editarCliente = clientes.FirstOrDefault(c => c.Id == cliente.Id);
@@ -108,6 +122,12 @@ namespace Proyecto1.Datos
         public static Producto ObtenerProductoPorId(int id)
         {
             return productos.FirstOrDefault(producto => producto.Id == id);
+        }
+        public static void AgregarFactura(Factura factura)
+        {
+            factura.Id = IdFactura();
+            facturas.Add(factura);
+            controladorArchivo.GuardarFacturas(facturas,archivoFacturas);
         }
     }
 

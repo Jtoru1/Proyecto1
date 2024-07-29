@@ -52,5 +52,18 @@ namespace Proyecto1.Controlador
             return preventa;
         }
 
+        public void RealizarVenta (Cliente cliente,Cajero cajero,MetodoPago.TipoPago metodoPago)
+        {
+            DateTime fechaActual = DateTime.Now;
+            string fechaFormateada = fechaActual.ToString("dd/MM/yyyy");
+            Factura factura = new Factura();
+            factura.Fecha = fechaActual;
+            factura.IdVendedor = cajero.Correo;
+            factura.IdCliente = cliente.Id.ToString();
+            factura.Ventas = preventa;
+            factura.MetodoPago = metodoPago;
+            Datos2.AgregarFactura(factura);
+        }
+
     }
 }

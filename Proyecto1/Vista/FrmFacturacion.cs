@@ -16,11 +16,13 @@ namespace Proyecto1.Vista
 {
     public partial class FrmFacturacion : Form
     {
+        private Cajero cajero;
         private ControladorVenta controladorVenta;
         private ControladorProducto controladorProducto;
-        public FrmFacturacion()
+        public FrmFacturacion(Cajero cajero)
         {
             InitializeComponent();
+            this.cajero = cajero;
             controladorVenta = new ControladorVenta();
             controladorProducto = new ControladorProducto();
             CargarComboBoxClientes();
@@ -33,6 +35,8 @@ namespace Proyecto1.Vista
 
         private void FrmFacturacion_Load(object sender, EventArgs e)
         {
+
+            lbcajero.Text = $"Bienvenido {cajero.Nombre}";
 
         }
 
@@ -139,6 +143,30 @@ namespace Proyecto1.Vista
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
+            }
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lbcajero_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (listView1.Items.Count > 0)
+            {
+                Cliente clienteSeleccionado = (Cliente)cbclientes.SelectedItem;
+                MetodoPago.TipoPago metodoPago = (MetodoPago.TipoPago)cbtipopago.SelectedItem;
+                controladorVenta.RealizarVenta(clienteSeleccionado, this.cajero, metodoPago);
+            }
+            else
+            {
+                MessageBox.Show("Por favor, agregue al menos un elemento a la factura.", "Validación fallida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
     }

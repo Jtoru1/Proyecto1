@@ -12,6 +12,7 @@
     <None Remove="clientes.csv" />
     <None Remove="productos.csv" />
     <None Remove="UsuarioCajeros.csv" />
+    <None Remove="ventas.csv" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +23,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="UsuarioCajeros.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ventas.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

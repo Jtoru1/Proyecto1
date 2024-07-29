@@ -74,9 +74,10 @@
             // 
             // listView1
             // 
+            listView1.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
             listView1.Location = new Point(28, 169);
             listView1.Name = "listView1";
-            listView1.Size = new Size(650, 464);
+            listView1.Size = new Size(919, 608);
             listView1.TabIndex = 4;
             listView1.UseCompatibleStateImageBehavior = false;
             // 
@@ -85,7 +86,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.DarkGoldenrod;
-            ClientSize = new Size(931, 728);
+            ClientSize = new Size(1040, 855);
             Controls.Add(listView1);
             Controls.Add(button3);
             Controls.Add(button2);
@@ -93,6 +94,7 @@
             Controls.Add(label1);
             Name = "FrmReporte";
             Text = "FrmReporte";
+            Load += FrmReporte_Load_1;
             ResumeLayout(false);
             PerformLayout();
         }

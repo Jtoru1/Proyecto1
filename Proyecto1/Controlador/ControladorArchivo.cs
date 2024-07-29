@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Proyecto1.Modelo.MetodoPago;
 
 namespace Proyecto1.Controlador
 {
@@ -69,13 +70,13 @@ namespace Proyecto1.Controlador
                         throw new FormatException("La línea del archivo no tiene el formato esperado.");
                     }
                     int idcliente;
-                   bool canConvert= int.TryParse(parts[0], out idcliente);
+                    bool canConvert = int.TryParse(parts[0], out idcliente);
                     if (canConvert)
                     {
                         var cliente = new Cliente(idcliente, parts[1], parts[2], parts[3], parts[4], parts[5]);
                         result.Add(cliente);
                     }
-                    
+
                 }
 
             }
@@ -84,7 +85,7 @@ namespace Proyecto1.Controlador
                 Console.WriteLine($"Error inesperado: {ex.Message}");
                 MessageBox.Show("Error al cargar el archivo." + ex.Message);
             }
-            return result;  
+            return result;
         }
         public List<Producto> CargarProductos(string path)
         {
@@ -123,23 +124,23 @@ namespace Proyecto1.Controlador
             }
             return result;
         }
-             
-            public static string ObtenerRutaRaizProyecto()
-            {
-                var currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                var projectDirectory = Directory.GetParent(currentDirectory).Parent.Parent.Parent.FullName;
-                return projectDirectory;
-            }
-        
 
-        public void guardarClientes (List<Cliente> clientes, string path)
+        public static string ObtenerRutaRaizProyecto()
+        {
+            var currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var projectDirectory = Directory.GetParent(currentDirectory).Parent.Parent.Parent.FullName;
+            return projectDirectory;
+        }
+
+
+        public void guardarClientes(List<Cliente> clientes, string path)
         {
             try
-            {             
+            {
                 string rutaProyecto = ObtenerRutaRaizProyecto();
-                string rutaArchivo = Path.Combine(rutaProyecto, path);                
+                string rutaArchivo = Path.Combine(rutaProyecto, path);
                 using (var writer = new StreamWriter(rutaArchivo, false, Encoding.UTF8))
-                {                   
+                {
 
                     // Escribir cada producto
                     foreach (var cliente in clientes)
@@ -177,6 +178,94 @@ namespace Proyecto1.Controlador
                 MessageBox.Show("Error al guardar el archivo." + ex.Message);
             }
 
+        }
+        public void GuardarFacturas(List<Factura> facturas, string path)
+        {
+            try
+            {
+                string rutaProyecto = ObtenerRutaRaizProyecto();
+                string rutaArchivo = Path.Combine(rutaProyecto, path);
+                using (var writer = new StreamWriter(rutaArchivo, false, Encoding.UTF8))
+                {
+                   
+                    foreach (var factura in facturas)
+                    {
+                        foreach (var venta in factura.Ventas)
+                        {
+                            writer.WriteLine($"{factura.Id},{factura.IdCliente},{factura.Fecha},{venta.Id},{venta.ProductoId},{venta.Cantidad},{venta.PrecioUnitario},{venta.Total},{factura.MetodoPago},{factura.IdVendedor},{factura.Total}");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error inesperado: {ex.Message}");
+                MessageBox.Show("Error al guardar el archivo: " + ex.Message);
+            }
+        }
+        public List<Factura> CargarFacturas(string path)
+        {
+            var result = new List<Factura>();
+            try
+            {
+                var content = this.LoadFile(path);
+                var lines = content.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var line in lines) 
+                {
+                    var parts = line.Split(',');
+
+                    if (parts.Length < 11)
+                    {
+                        throw new FormatException("La línea del archivo no tiene el formato esperado.");
+                    }
+
+                    int idFactura;
+                    if (int.TryParse(parts[0], out idFactura))
+                    {
+                        string idCliente = parts[1];
+                        DateTime fecha = DateTime.Parse(parts[2]);
+                        int idVenta = int.Parse(parts[3]);
+                        int productoId = int.Parse(parts[4]);
+                        int cantidad = int.Parse(parts[5]);
+                        double precioUnitario = double.Parse(parts[6]);
+                        double totalVenta = double.Parse(parts[7]);
+                        TipoPago metodoPago = (TipoPago)Enum.Parse(typeof(TipoPago), parts[8]);
+                        string idVendedor = parts[9];
+                        double totalFactura = double.Parse(parts[10]);
+
+                        var factura = result.FirstOrDefault(f => f.Id == idFactura);
+                        if (factura == null)
+                        {
+                            factura = new Factura
+                            {
+                                Id = idFactura,
+                                IdCliente = idCliente,
+                                Fecha = fecha,
+                                MetodoPago = metodoPago,
+                                IdVendedor = idVendedor
+                            };
+                            result.Add(factura);
+                        }
+
+                        var venta = new Venta
+                        {
+                            Id = idVenta,
+                            ProductoId = productoId,
+                            Cantidad = cantidad,
+                            PrecioUnitario = precioUnitario
+                        };
+                        factura.Ventas.Add(venta);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error inesperado: {ex.Message}");
+                MessageBox.Show("Error al cargar el archivo: " + ex.Message);
+            }
+
+            return result;
         }
     }
 }

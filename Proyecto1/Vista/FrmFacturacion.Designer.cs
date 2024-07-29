@@ -39,18 +39,20 @@
             label5 = new Label();
             btnagregar = new Button();
             listView1 = new ListView();
-            button2 = new Button();
+            btnfactura = new Button();
+            lbcajero = new Label();
             SuspendLayout();
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point);
-            label1.Location = new Point(291, 23);
+            label1.Location = new Point(415, 21);
             label1.Name = "label1";
             label1.Size = new Size(239, 32);
             label1.TabIndex = 0;
             label1.Text = "GENERAR FACTURA";
+            label1.Click += label1_Click;
             // 
             // cbclientes
             // 
@@ -156,15 +158,27 @@
             listView1.UseCompatibleStateImageBehavior = false;
             listView1.SelectedIndexChanged += listView1_SelectedIndexChanged;
             // 
-            // button2
+            // btnfactura
             // 
-            button2.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            button2.Location = new Point(50, 614);
-            button2.Name = "button2";
-            button2.Size = new Size(130, 55);
-            button2.TabIndex = 12;
-            button2.Text = "REALIZAR FACTURA";
-            button2.UseVisualStyleBackColor = true;
+            btnfactura.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            btnfactura.Location = new Point(50, 614);
+            btnfactura.Name = "btnfactura";
+            btnfactura.Size = new Size(130, 55);
+            btnfactura.TabIndex = 12;
+            btnfactura.Text = "REALIZAR FACTURA";
+            btnfactura.UseVisualStyleBackColor = true;
+            btnfactura.Click += button2_Click;
+            // 
+            // lbcajero
+            // 
+            lbcajero.AutoSize = true;
+            lbcajero.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
+            lbcajero.Location = new Point(50, 21);
+            lbcajero.Name = "lbcajero";
+            lbcajero.Size = new Size(84, 25);
+            lbcajero.TabIndex = 13;
+            lbcajero.Text = "Cajero : ";
+            lbcajero.Click += lbcajero_Click;
             // 
             // FrmFacturacion
             // 
@@ -172,7 +186,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.SteelBlue;
             ClientSize = new Size(1151, 847);
-            Controls.Add(button2);
+            Controls.Add(lbcajero);
+            Controls.Add(btnfactura);
             Controls.Add(listView1);
             Controls.Add(btnagregar);
             Controls.Add(label5);
@@ -204,6 +219,7 @@
         private Label label5;
         private Button btnagregar;
         private ListView listView1;
-        private Button button2;
+        private Button btnfactura;
+        private Label lbcajero;
     }
 }
