@@ -127,7 +127,26 @@ namespace Proyecto1.Datos
         {
             factura.Id = IdFactura();
             facturas.Add(factura);
+            ActualizarInventarioProductos(factura.Ventas);
             controladorArchivo.GuardarFacturas(facturas,archivoFacturas);
+        }
+        private static void ActualizarInventarioProductos(List<Venta> ventas)
+        {
+            foreach (var venta in ventas)
+            {
+                var producto = productos.First(p => p.Id == venta.ProductoId);
+                if(producto.Cantidad >= venta.Cantidad)
+                {
+                    producto.Cantidad -= venta.Cantidad;
+                }
+                else
+                {
+                    producto.Cantidad = 0;
+                }
+              
+            }
+            controladorArchivo.guardarProductos(productos,archivoProductos);
+
         }
     }
 

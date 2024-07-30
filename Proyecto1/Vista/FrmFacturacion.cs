@@ -163,11 +163,14 @@ namespace Proyecto1.Vista
                 Cliente clienteSeleccionado = (Cliente)cbclientes.SelectedItem;
                 MetodoPago.TipoPago metodoPago = (MetodoPago.TipoPago)cbtipopago.SelectedItem;
                 controladorVenta.RealizarVenta(clienteSeleccionado, this.cajero, metodoPago);
+                MessageBox.Show("Factura realizada correctamente.", "Factura Guardada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                this.Hide();
             }
             else
             {
                 MessageBox.Show("Por favor, agregue al menos un elemento a la factura.", "Validación fallida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+
     }
 }

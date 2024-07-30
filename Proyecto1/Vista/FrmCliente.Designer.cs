@@ -34,6 +34,7 @@
             label1 = new Label();
             label2 = new Label();
             listView1 = new ListView();
+            button1 = new Button();
             SuspendLayout();
             // 
             // btnAgregar
@@ -98,12 +99,24 @@
             listView1.UseCompatibleStateImageBehavior = false;
             listView1.SelectedIndexChanged += listView1_SelectedIndexChanged_1;
             // 
+            // button1
+            // 
+            button1.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
+            button1.Location = new Point(805, 438);
+            button1.Name = "button1";
+            button1.Size = new Size(167, 65);
+            button1.TabIndex = 7;
+            button1.Text = "Historial de compras ";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // FrmCliente
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.HotTrack;
             ClientSize = new Size(1139, 755);
+            Controls.Add(button1);
             Controls.Add(listView1);
             Controls.Add(label2);
             Controls.Add(label1);
@@ -124,5 +137,6 @@
         private Label label1;
         private Label label2;
         private ListView listView1;
+        private Button button1;
     }
 }

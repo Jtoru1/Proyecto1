@@ -15,6 +15,39 @@ namespace Proyecto1.Controlador
         {
             return facturas;
         }
+        public List<Factura> ObtenerVentasPorFecha(DateTime fecha)
+        {
+            return facturas.Where(f => f.Fecha.Date == fecha.Date).ToList();
+        }
+
+        // Reporte de ventas por mes y año
+        public List<Factura> ObtenerVentasPorMesYAño(int mes, int año)
+        {
+            return facturas.Where(f => f.Fecha.Month == mes && f.Fecha.Year == año).ToList();
+        }
+
+        // Vendedores con mayores índices de ventas
+        public List<(string IdVendedor, double TotalVentas)> ObtenerVendedoresConMayoresVentas()
+        {
+            return facturas.GroupBy(f => f.IdVendedor)
+                           .Select(grp => (IdVendedor: grp.Key, TotalVentas: grp.Sum(f => f.Total)))
+                           .OrderByDescending(v => v.TotalVentas)
+                           .ToList();
+        }
+
+        // Clientes con mayores compras
+        public List<(string IdCliente, double TotalCompras)> ObtenerClientesConMayoresCompras()
+        {
+            return facturas.GroupBy(f => f.IdCliente)
+                           .Select(grp => (IdCliente: grp.Key, TotalCompras: grp.Sum(f => f.Total)))
+                           .OrderByDescending(c => c.TotalCompras)
+                           .ToList();
+        }
+        public Cliente ObtenerClientePorId (int id)
+        {
+           return Datos2.ObtenerClientePorId(id);
+            
+        }
     }
 
 }

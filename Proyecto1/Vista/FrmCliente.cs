@@ -128,5 +128,26 @@ namespace Proyecto1.Vista
         {
 
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count == 1)
+            {
+                ListViewItem selectedItem = listView1.SelectedItems[0];
+                string id = selectedItem.SubItems[0].Text;
+                var cliente = controladorCliente.getCliente(int.Parse(id));
+                if (cliente != null)
+                {
+                    var nuevaPantalla = new FrmHistorialCliente(cliente);
+                    nuevaPantalla.Show();
+                    this.Hide();
+                }
+
+            }
+            else
+            {
+                MessageBox.Show("Por favor seleccione un Cliente.");
+            }
+        }
     }
 }
