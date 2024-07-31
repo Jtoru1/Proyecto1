@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Proyecto1.Controlador
 {
-    public class ControladorHistorialCliente
+    public class ControladorHistorialCliente  // Controlador para verificar el historial de compras del cliente 
     {
-        private List<Factura> facturas = Datos2.facturas;
+        private List<Factura> facturas = Datos2.facturas; // Método para obtener las facturas por medio de datos
         public List<Venta> ObtenerHistorialVentas(int idCliente)
         {
             var historialVentas = new List<Venta>();
@@ -26,7 +26,7 @@ namespace Proyecto1.Controlador
 
             return historialVentas;
         }
-        public Producto ObtenerProductoPorId (int productoId)
+        public Producto ObtenerProductoPorId (int productoId) // Método para obtener el producto por medio del ID
         {
             return Datos2.ObtenerProductoPorId(productoId);
         }

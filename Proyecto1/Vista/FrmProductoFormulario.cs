@@ -14,11 +14,11 @@ namespace Proyecto1.Vista
 {
     public partial class FrmProductoFormulario : Form
     {
-        private ControladorModificarProducto controladorModificarProducto;
+        private ControladorModificarProducto controladorModificarProducto; // Instancia el controlador de modificar producto 
         public FrmProductoFormulario()
         {
             InitializeComponent();
-            controladorModificarProducto = new ControladorModificarProducto();
+            controladorModificarProducto = new ControladorModificarProducto(); // Inicializa el controlador de modificar producto 
         }
 
         private void label5_Click(object sender, EventArgs e)
@@ -26,7 +26,7 @@ namespace Proyecto1.Vista
 
         }
 
-        private void btnregistrar_Click(object sender, EventArgs e)
+        private void btnregistrar_Click(object sender, EventArgs e) // Método en el botón para poder registrar un producto 
         {
             string nombre = txtnombre.Text;
             string descripcion = txtdescripcion.Text;
@@ -52,8 +52,8 @@ namespace Proyecto1.Vista
                 Cantidad = Utilidades.Utilidades.StrToIntConDefault(cantidad, 0)
 
             };
-            controladorModificarProducto.AgregarProducto(nuevoProducto);
-            var pantallaCliente = new FrmInventario();
+            controladorModificarProducto.AgregarProducto(nuevoProducto); //Agrega el nuevo producto 
+            var pantallaCliente = new FrmInventario(); // Muestra la pantalla de formulario de inventario 
             pantallaCliente.Show();
             this.Hide();
         }
@@ -63,7 +63,7 @@ namespace Proyecto1.Vista
 
         }
 
-        private void txtprecio_KeyPress(object sender, KeyPressEventArgs e)
+        private void txtprecio_KeyPress(object sender, KeyPressEventArgs e) // Metodo para que se pueden escribir unicamente número y no letras u otros caracteres 
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
             {
@@ -77,7 +77,7 @@ namespace Proyecto1.Vista
             }
         }
 
-        private void txtcantidad_KeyPress(object sender, KeyPressEventArgs e)
+        private void txtcantidad_KeyPress(object sender, KeyPressEventArgs e) // Metodo para que se pueden escribir unicamente número y no letras u otros caracteres 
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
             {

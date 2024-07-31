@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Proyecto1.Modelo
 {
-    public class Mes
+    public class Mes // Atributos necesarios para la clase Mes
     {
         public int Numero { get; set; }
         public string Nombre { get; set; }

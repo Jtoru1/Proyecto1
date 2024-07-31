@@ -7,7 +7,7 @@ using static Proyecto1.Modelo.MetodoPago;
 
 namespace Proyecto1.Modelo
 {
-    public class Factura
+    public class Factura //Atributos necesarios que debe tener la factura
     {
         public int Id { get; set; }
         public string IdCliente { get; set; }

@@ -14,13 +14,13 @@ namespace Proyecto1.Vista
 {
     public partial class FrmEditarProducto : Form
     {
-        private ControladorEditarProducto controladorEditarProducto;
+        private ControladorEditarProducto controladorEditarProducto; // Instancia el controlador editar producto 
         private Producto productoPorEditar;
         public FrmEditarProducto(Producto producto)
         {
             InitializeComponent();
             productoPorEditar = producto;
-            controladorEditarProducto = new ControladorEditarProducto();
+            controladorEditarProducto = new ControladorEditarProducto(); // Inicializa el contrlador de editar productos 
             txteditarnombre.Text = producto.Nombre;
             txteditardescripcion.Text = producto.Descripcion;
             txteditarprecio.Text = producto.Precio.ToString();
@@ -55,9 +55,9 @@ namespace Proyecto1.Vista
                 return;
             }
 
-            Producto ProductoPorEditar = new Producto
+            Producto ProductoPorEditar = new Producto // Crea una instancia del producto con los datos editados 
             {
-                Id = this.productoPorEditar.Id,
+                Id = this.productoPorEditar.Id, // Mantiene el mismo id del producto 
                 Nombre = nombre,
                 Descripcion = descripcion,
                 Precio = Utilidades.Utilidades.StrToDoubleConDefault(precio, 0),
@@ -65,7 +65,7 @@ namespace Proyecto1.Vista
 
 
             };
-            controladorEditarProducto.editarProducto(ProductoPorEditar);
+            controladorEditarProducto.editarProducto(ProductoPorEditar); // Llama al método para guardar los cambios
             var pantallaCliente = new FrmInventario();
             pantallaCliente.Show();
             this.Hide();
@@ -85,7 +85,7 @@ namespace Proyecto1.Vista
             }
         }
 
-        private void txteditarcantidad_KeyPress(object sender, KeyPressEventArgs e)
+        private void txteditarcantidad_KeyPress(object sender, KeyPressEventArgs e) // Se encarga de que solamente se escriban números y no letras o caracteres
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
             {

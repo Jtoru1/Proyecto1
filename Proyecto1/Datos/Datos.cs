@@ -25,28 +25,28 @@ namespace Proyecto1.Datos
         {
             CargarDatos();
         }
-        private static void CargarDatos()
+        private static void CargarDatos() // Método de cargar de datos de cajero, clientes, productos y facturas
         {
             cajeros = controladorArchivo.CargarCajeros(nombreArchivo);
             clientes = controladorArchivo.CargarClientes(archivoClientes);
             productos= controladorArchivo.CargarProductos(archivoProductos);
             facturas=controladorArchivo.CargarFacturas(archivoFacturas);
         }
-        public static void AgregarCliente(Cliente cliente)
+        public static void AgregarCliente(Cliente cliente) // método para poder agregar al cliente 
         {
             cliente.Id = IdUsuario();
             clientes.Add(cliente);
             controladorArchivo.guardarClientes(clientes, archivoClientes);
 
         }
-        public static void AgregarProducto(Producto producto)
+        public static void AgregarProducto(Producto producto) // Método para poder agregar el producto 
         {
             producto.Id = IdProducto();
             productos.Add(producto);
             controladorArchivo.guardarProductos(productos, archivoProductos);
 
         }
-        private static int IdUsuario()
+        private static int IdUsuario() // Método agregar un id al usuario
         {
             if (clientes.Any())
             {
@@ -57,7 +57,7 @@ namespace Proyecto1.Datos
                 return 1; 
             }
         }
-        private static int IdProducto()
+        private static int IdProducto() // Método para agregar un id al producto
         {
             if (productos.Any())
             {
@@ -68,7 +68,7 @@ namespace Proyecto1.Datos
                 return 1; 
             }
         }
-        private static int IdFactura()
+        private static int IdFactura() // Método para agregar un ID a la factura
         {
             if (facturas.Any())
             {
@@ -80,10 +80,10 @@ namespace Proyecto1.Datos
             }
         }
 
-        public static void EditarCliente(Cliente cliente)
+        public static void EditarCliente(Cliente cliente) // Método para poder editar los datos del cliente 
         {
-            var editarCliente = clientes.FirstOrDefault(c => c.Id == cliente.Id);
-            if (editarCliente != null)
+            var editarCliente = clientes.FirstOrDefault(c => c.Id == cliente.Id); // Se verificar que tenga un ID para poder editar al cliente
+            if (editarCliente != null) 
             {
                 editarCliente.Nombre = cliente.Nombre;
                 editarCliente.Apellido = cliente.Apellido;
@@ -92,11 +92,11 @@ namespace Proyecto1.Datos
                 editarCliente.Correo = cliente.Correo;
 
             }
-            controladorArchivo.guardarClientes(clientes, archivoClientes);
+            controladorArchivo.guardarClientes(clientes, archivoClientes); // Se guarda el cliente editado 
         }
-        public static void EditarProducto(Producto producto)
+        public static void EditarProducto(Producto producto) // Método para poder editar el producto 
         {
-            var editarProducto = productos.FirstOrDefault(c => c.Id == producto.Id);
+            var editarProducto = productos.FirstOrDefault(c => c.Id == producto.Id);// Se verificar que tenga un ID para poder editar el producto
             if (editarProducto != null)
             {
                 editarProducto.Nombre = producto.Nombre;
@@ -105,43 +105,43 @@ namespace Proyecto1.Datos
                 editarProducto.Cantidad = producto.Cantidad;
 
             }
-            controladorArchivo.guardarProductos(productos, archivoProductos);
+            controladorArchivo.guardarProductos(productos, archivoProductos); // Se guarda el producto editado 
         }
-        public static void ActualizarClientes ()
+        public static void ActualizarClientes () // Método para guardar los clientes actualizados 
         {
             controladorArchivo.guardarClientes(clientes,archivoClientes);
         }
-        public static void ActualizarProductos()
+        public static void ActualizarProductos() // Método para guaradar los productos actualizados
         {
             controladorArchivo.guardarProductos(productos, archivoProductos);
         }
-        public static Cliente ObtenerClientePorId (int id)
+        public static Cliente ObtenerClientePorId (int id) // Método para obtener el cliente por ID
         {
             return clientes.FirstOrDefault(cliente => cliente.Id == id);
         }
-        public static Producto ObtenerProductoPorId(int id)
+        public static Producto ObtenerProductoPorId(int id) // Método para obtener el producto por ID
         {
             return productos.FirstOrDefault(producto => producto.Id == id);
         }
-        public static void AgregarFactura(Factura factura)
+        public static void AgregarFactura(Factura factura) // Método para agregar una factura 
         {
             factura.Id = IdFactura();
             facturas.Add(factura);
             ActualizarInventarioProductos(factura.Ventas);
             controladorArchivo.GuardarFacturas(facturas,archivoFacturas);
         }
-        private static void ActualizarInventarioProductos(List<Venta> ventas)
+        private static void ActualizarInventarioProductos(List<Venta> ventas) // Método para actualizar el inventario de los productos 
         {
             foreach (var venta in ventas)
             {
                 var producto = productos.First(p => p.Id == venta.ProductoId);
-                if(producto.Cantidad >= venta.Cantidad)
+                if(producto.Cantidad >= venta.Cantidad) // Si la cantidad es mayor o igual a la cantidad vendida 
                 {
-                    producto.Cantidad -= venta.Cantidad;
+                    producto.Cantidad -= venta.Cantidad; // Reduce la cantidad que hay en inventario en ese momento por la cantidad vendida
                 }
                 else
                 {
-                    producto.Cantidad = 0;
+                    producto.Cantidad = 0; // Si la cantidad es menor a la cantidad vendida, se ajusta a 0
                 }
               
             }

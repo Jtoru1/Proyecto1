@@ -16,18 +16,18 @@ namespace Proyecto1.Vista
 {
     public partial class FrmFacturacion : Form
     {
-        private Cajero cajero;
-        private ControladorVenta controladorVenta;
-        private ControladorProducto controladorProducto;
+        private Cajero cajero; // Instancia la clase cajero 
+        private ControladorVenta controladorVenta; // Instancia el controlador de venta 
+        private ControladorProducto controladorProducto; // Instancia el controlador de producto 
         public FrmFacturacion(Cajero cajero)
         {
             InitializeComponent();
             this.cajero = cajero;
             controladorVenta = new ControladorVenta();
             controladorProducto = new ControladorProducto();
-            CargarComboBoxClientes();
-            CargarComboBoxTipoPago();
-            CargarComboboxProducto();
+            CargarComboBoxClientes(); // Se encarga de llamar al método 
+            CargarComboBoxTipoPago(); // Se encarga de llamar el método 
+            CargarComboboxProducto(); // Se encarga de llamar al método 
             {
 
             };
@@ -40,7 +40,7 @@ namespace Proyecto1.Vista
 
         }
 
-        private void CargarComboBoxClientes()
+        private void CargarComboBoxClientes() // Método para cargar el combobox de la lista de clientes 
         {
             cbclientes.DataSource = controladorVenta.obtenerClientes();
             cbclientes.DisplayMember = "Display";
@@ -49,11 +49,11 @@ namespace Proyecto1.Vista
 
 
         }
-        private void CargarComboBoxTipoPago()
+        private void CargarComboBoxTipoPago() // Método para cargar el combo box del método de pago 
         {
             cbtipopago.DataSource = Enum.GetValues(typeof(TipoPago));
         }
-        private void CargarComboboxProducto()
+        private void CargarComboboxProducto()  // Método para cargar el combobox con el id y el correo del cliente
         {
             cbproducto.DataSource = controladorProducto.obtenerProductos();
             cbproducto.DisplayMember = "Display";
@@ -70,7 +70,7 @@ namespace Proyecto1.Vista
         {
 
         }
-        private void CargarListaVentas()
+        private void CargarListaVentas() // Método para cargar la lista de ventas en la listview
         {
             var preventas = controladorVenta.ObtenerPreventa();
 
@@ -98,7 +98,7 @@ namespace Proyecto1.Vista
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (cbproducto.SelectedItem == null)
+            if (cbproducto.SelectedItem == null)  // Verifica si se ha seleccionado un productto del combo box
             {
                 MessageBox.Show("Por favor seleccione un producto.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -111,19 +111,19 @@ namespace Proyecto1.Vista
             }
 
 
-            Producto productoSeleccionado = (Producto)cbproducto.SelectedItem;
-            if (productoSeleccionado.Cantidad < cantidad)
+            Producto productoSeleccionado = (Producto)cbproducto.SelectedItem; // Obtiene el producto seleccionado del combo box
+            if (productoSeleccionado.Cantidad < cantidad) // Verificar si hay disponibilidad del producto en el inventario 
             {
                 MessageBox.Show("Modifique su cantidad de producto.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            double total = cantidad * productoSeleccionado.Precio;
-            var venta = new Venta();
+            double total = cantidad * productoSeleccionado.Precio; // Calcula el total de la venta 
+            var venta = new Venta(); // Crear una nueva venta con los datos actualizados 
             venta.Cantidad = cantidad;
             venta.ProductoId = productoSeleccionado.Id;
             venta.PrecioUnitario = productoSeleccionado.Precio;
             controladorVenta.agregarVenta(venta);
-            CargarListaVentas();
+            CargarListaVentas(); // Actualiza la lista de ventas en la pantalla 
 
 
         }
@@ -158,10 +158,10 @@ namespace Proyecto1.Vista
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (listView1.Items.Count > 0)
+            if (listView1.Items.Count > 0) // Verifica que haya el menos un item en la lista 
             {
-                Cliente clienteSeleccionado = (Cliente)cbclientes.SelectedItem;
-                MetodoPago.TipoPago metodoPago = (MetodoPago.TipoPago)cbtipopago.SelectedItem;
+                Cliente clienteSeleccionado = (Cliente)cbclientes.SelectedItem; // Obtiene el cliente seleccionado 
+                MetodoPago.TipoPago metodoPago = (MetodoPago.TipoPago)cbtipopago.SelectedItem; // Obtiene el método de pago 
                 controladorVenta.RealizarVenta(clienteSeleccionado, this.cajero, metodoPago);
                 MessageBox.Show("Factura realizada correctamente.", "Factura Guardada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 this.Hide();

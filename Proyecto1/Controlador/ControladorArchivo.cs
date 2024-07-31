@@ -8,21 +8,21 @@ using static Proyecto1.Modelo.MetodoPago;
 
 namespace Proyecto1.Controlador
 {
-    public class ControladorArchivo
+    public class ControladorArchivo // Controlador general del proyecto, gestiona la carga y guardado de archivos
     {
-        public string LoadFile(string filePath)
+        public string LoadFile(string filePath) //Meotdo para leer el contenido del archivo como texto
         {
             var content = File.ReadAllText(filePath);
             return content;
         }
-        public List<Cajero> CargarCajeros(string path)
+        public List<Cajero> CargarCajeros(string path) // Metodo para cargar los cajeros desde un archivo CSV
         {
             var result = new List<Cajero>();
 
             try
             {
 
-                var content = this.LoadFile(path);
+                var content = this.LoadFile(path); // Lee el contenido del archivo
 
 
                 var lines = content.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
@@ -34,11 +34,11 @@ namespace Proyecto1.Controlador
                     var parts = line.Split(',');
 
 
-                    if (parts.Length < 3)
+                    if (parts.Length < 3) // Verificar que la linea tenga el formato esperado 
                     {
                         throw new FormatException("La línea del archivo no tiene el formato esperado.");
                     }
-                    var cajero = new Cajero(parts[0], parts[1], parts[2]);
+                    var cajero = new Cajero(parts[0], parts[1], parts[2]);  // Crear un nuevo cajero y agregarlo a la lista 
                     result.Add(cajero);
                 }
             }
@@ -51,12 +51,12 @@ namespace Proyecto1.Controlador
 
             return result;
         }
-        public List<Cliente> CargarClientes(string path)
+        public List<Cliente> CargarClientes(string path) // Método para cargar clientes desde un csv
         {
             var result = new List<Cliente>();
             try
             {
-                var content = this.LoadFile(path);
+                var content = this.LoadFile(path);// Lee el contenido del archivo
                 var lines = content.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 
                 foreach (var line in lines)
@@ -65,15 +65,15 @@ namespace Proyecto1.Controlador
                     var parts = line.Split(',');
 
 
-                    if (parts.Length < 6)
+                    if (parts.Length < 6) // Verificar que la linea tenga el formato esperado 
                     {
                         throw new FormatException("La línea del archivo no tiene el formato esperado.");
                     }
-                    int idcliente;
+                    int idcliente;  // Convertir el ID cliente a un entero
                     bool canConvert = int.TryParse(parts[0], out idcliente);
                     if (canConvert)
                     {
-                        var cliente = new Cliente(idcliente, parts[1], parts[2], parts[3], parts[4], parts[5]);
+                        var cliente = new Cliente(idcliente, parts[1], parts[2], parts[3], parts[4], parts[5]); // Crear un nuevo cliente y agregarlo a la lista de resultados 
                         result.Add(cliente);
                     }
 
@@ -87,12 +87,12 @@ namespace Proyecto1.Controlador
             }
             return result;
         }
-        public List<Producto> CargarProductos(string path)
+        public List<Producto> CargarProductos(string path) // Método de carga de productos desde un archivo csv
         {
             var result = new List<Producto>();
             try
             {
-                var content = this.LoadFile(path);
+                var content = this.LoadFile(path); // Leer el contenido del archivo 
                 var lines = content.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 
                 foreach (var line in lines)
@@ -101,15 +101,15 @@ namespace Proyecto1.Controlador
                     var parts = line.Split(',');
 
 
-                    if (parts.Length < 5)
+                    if (parts.Length < 5) // Verificar que la linea tenga el formato esperado 
                     {
                         throw new FormatException("La línea del archivo no tiene el formato esperado.");
                     }
-                    int idproducto;
+                    int idproducto; // Convertir el ID a un entero 
                     bool canConvert = int.TryParse(parts[0], out idproducto);
                     if (canConvert)
                     {
-                        var cantidad = Utilidades.Utilidades.StrToIntConDefault(parts[4], 0);
+                        var cantidad = Utilidades.Utilidades.StrToIntConDefault(parts[4], 0); // Convertir la cantidad utilizando un método utilitario, en la clase de Utilidades 
                         var producto = new Producto(idproducto, parts[1], parts[2], parts[3], cantidad);
                         result.Add(producto);
                     }
@@ -125,7 +125,7 @@ namespace Proyecto1.Controlador
             return result;
         }
 
-        public static string ObtenerRutaRaizProyecto()
+        public static string ObtenerRutaRaizProyecto() // Método para obtener la raiz del proyecto 
         {
             var currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
             var projectDirectory = Directory.GetParent(currentDirectory).Parent.Parent.Parent.FullName;
@@ -133,7 +133,7 @@ namespace Proyecto1.Controlador
         }
 
 
-        public void guardarClientes(List<Cliente> clientes, string path)
+        public void guardarClientes(List<Cliente> clientes, string path) // Método para guardar la lista de clientes en un archivo csv
         {
             try
             {
@@ -142,7 +142,7 @@ namespace Proyecto1.Controlador
                 using (var writer = new StreamWriter(rutaArchivo, false, Encoding.UTF8))
                 {
 
-                    // Escribir cada producto
+                    // Escribir cada cliente en el archivo
                     foreach (var cliente in clientes)
                     {
                         writer.WriteLine($"{cliente.Id},{cliente.Nombre},{cliente.Apellido},{cliente.Direccion},{cliente.Numero},{cliente.Correo}");
@@ -156,7 +156,7 @@ namespace Proyecto1.Controlador
             }
 
         }
-        public void guardarProductos(List<Producto> productos, string path)
+        public void guardarProductos(List<Producto> productos, string path) // Método de guardado de productos en un archivo csv
         {
             try
             {
@@ -179,7 +179,7 @@ namespace Proyecto1.Controlador
             }
 
         }
-        public void GuardarFacturas(List<Factura> facturas, string path)
+        public void GuardarFacturas(List<Factura> facturas, string path) // Método para guardar la lista de facturas en un archivo csv
         {
             try
             {
@@ -203,19 +203,19 @@ namespace Proyecto1.Controlador
                 MessageBox.Show("Error al guardar el archivo: " + ex.Message);
             }
         }
-        public List<Factura> CargarFacturas(string path)
+        public List<Factura> CargarFacturas(string path) // Método para cargar facturas en el archivo csv
         {
             var result = new List<Factura>();
             try
             {
-                var content = this.LoadFile(path);
+                var content = this.LoadFile(path); // Lee el contenido del archivo 
                 var lines = content.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 
                 foreach (var line in lines) 
                 {
                     var parts = line.Split(',');
 
-                    if (parts.Length < 11)
+                    if (parts.Length < 11) // Verificar que la linea tenga el formato esperado 
                     {
                         throw new FormatException("La línea del archivo no tiene el formato esperado.");
                     }
@@ -234,10 +234,10 @@ namespace Proyecto1.Controlador
                         string idVendedor = parts[9];
                         double totalFactura = double.Parse(parts[10]);
 
-                        var factura = result.FirstOrDefault(f => f.Id == idFactura);
+                        var factura = result.FirstOrDefault(f => f.Id == idFactura); // Verificar si la factura ya existe en la lista
                         if (factura == null)
                         {
-                            factura = new Factura
+                            factura = new Factura // Si la factura no existe, crea una nueva y la agrega a la lista
                             {
                                 Id = idFactura,
                                 IdCliente = idCliente,
@@ -248,7 +248,7 @@ namespace Proyecto1.Controlador
                             result.Add(factura);
                         }
 
-                        var venta = new Venta
+                        var venta = new Venta  // Crear  una nueva venta y la agrega a la factura 
                         {
                             Id = idVenta,
                             ProductoId = productoId,

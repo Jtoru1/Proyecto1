@@ -16,15 +16,15 @@ namespace Proyecto1.Vista
 {
     public partial class FrmInventario : Form
     {
-        private ControladorProducto controladorProducto;
+        private ControladorProducto controladorProducto; // instacia el controlador de producto 
         public FrmInventario()
         {
             InitializeComponent();
             this.FormClosed += FrmInicio_FormClosed;
-            controladorProducto = new ControladorProducto();
+            controladorProducto = new ControladorProducto(); // Inicializa el controlador de producto 
             this.Load += FrmProducto_Load;
-            listView1.MultiSelect = true;
-            listView1.FullRowSelect = true;
+            listView1.MultiSelect = true; // Permite seleccionar multiples opciones en la listview 
+            listView1.FullRowSelect = true; // permite selecionar una fila completa en la listview 
         }
         private void FrmInicio_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -57,7 +57,7 @@ namespace Proyecto1.Vista
         }
         private void btnarticulo_Click(object sender, EventArgs e)
         {
-            var nuevaPantalla = new FrmProductoFormulario();
+            var nuevaPantalla = new FrmProductoFormulario(); // Muestra la pantalla de Producto Formulario 
             nuevaPantalla.Show();
             this.Hide();
 
@@ -65,11 +65,11 @@ namespace Proyecto1.Vista
 
         private void btneditar_Click(object sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count == 1)
+            if (listView1.SelectedItems.Count == 1)  // Verifica si se ha seleccionado un item en la listview 
             {
-                ListViewItem selectedItem = listView1.SelectedItems[0];
-                string id = selectedItem.SubItems[0].Text;
-                var producto = controladorProducto.GetProducto(int.Parse(id));
+                ListViewItem selectedItem = listView1.SelectedItems[0]; // Obtiene el item seleccionado
+                string id = selectedItem.SubItems[0].Text;// Saca el id del producto 
+                var producto = controladorProducto.GetProducto(int.Parse(id)); // Obtiene el producto correspondiente al id 
                 if (producto != null)
                 {
                     var nuevaPantalla = new FrmEditarProducto(producto);
@@ -98,22 +98,22 @@ namespace Proyecto1.Vista
 
         private void btneliminar_Click(object sender, EventArgs e)
         {
-            var listaProductos = controladorProducto.obtenerProductos();
-            if (listView1.SelectedItems.Count > 0)
+            var listaProductos = controladorProducto.obtenerProductos(); // Obtiene la lista de productos 
+            if (listView1.SelectedItems.Count > 0) // Verifica que se haya seleccionado un item
             {
 
-                foreach (ListViewItem item in listView1.SelectedItems)
+                foreach (ListViewItem item in listView1.SelectedItems) // Itera a través de cadaitem seleccionado 
                 {
 
-                    int id = int.Parse(item.SubItems[0].Text);
+                    int id = int.Parse(item.SubItems[0].Text); // saca el id del producto 
                     var producto = listaProductos.FirstOrDefault(c => c.Id == id);
                     if (producto != null)
                     {
-                        listaProductos.Remove(producto);
+                        listaProductos.Remove(producto); // Elmina el producto de la lista de productos 
                     }
 
 
-                    listView1.Items.Remove(item);
+                    listView1.Items.Remove(item); // Eliminar el producto seleccionado de la listview 
                 }
                 controladorProducto.ActualizarListaProducto();
                 MessageBox.Show("Producto eliminado exitosamente.");

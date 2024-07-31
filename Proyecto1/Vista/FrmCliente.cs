@@ -16,22 +16,22 @@ namespace Proyecto1.Vista
 {
     public partial class FrmCliente : Form
     {
-        private ControladorCliente controladorCliente;
+        private ControladorCliente controladorCliente; // Instancia del controlador cliente 
         public FrmCliente()
         {
             InitializeComponent();
-            this.FormClosed += FrmInicio_FormClosed;
-            controladorCliente = new ControladorCliente();
-            this.Load += FrmCliente_Load;
-            listView1.MultiSelect = true;
-            listView1.FullRowSelect = true;
+            this.FormClosed += FrmInicio_FormClosed; // asigna el evento para cerrar el formulario
+            controladorCliente = new ControladorCliente(); // Inicializa el controlador de clientes 
+            this.Load += FrmCliente_Load;//asigna el evento para cargar el formulario
+            listView1.MultiSelect = true; // Permite la selección multiple en la listview
+            listView1.FullRowSelect = true; // Permite seleccionar toda la fila en la listview
         }
         private void FrmInicio_FormClosed(object sender, FormClosedEventArgs e)
         {
-            this.Hide();
+            this.Hide(); // Esconde el formulario al cerrarlo
         }
 
-        private void FrmCliente_Load(object sender, EventArgs e)
+        private void FrmCliente_Load(object sender, EventArgs e) // Carga de datos del cliente en la listview 
         {
             var listaClientes = controladorCliente.obtenerClientes();
             listView1.View = View.Details;
@@ -56,9 +56,9 @@ namespace Proyecto1.Vista
 
         }
 
-        private void btnAgregar_Click(object sender, EventArgs e)
+        private void btnAgregar_Click(object sender, EventArgs e) // Método en el botón para agregar clientes 
         {
-            var nuevaPantalla = new FrmClienteFormulario();
+            var nuevaPantalla = new FrmClienteFormulario(); // Permite acceder a la pantalla de creación de clientes o Usuarios
             nuevaPantalla.Show();
             this.Hide();
         }
@@ -73,16 +73,16 @@ namespace Proyecto1.Vista
 
         }
 
-        private void btnEditar_Click(object sender, EventArgs e)
+        private void btnEditar_Click(object sender, EventArgs e) // Método en el botón para editar clientes 
         {
             if (listView1.SelectedItems.Count == 1)
             {
                 ListViewItem selectedItem = listView1.SelectedItems[0];
                 string id = selectedItem.SubItems[0].Text;
-                var cliente = controladorCliente.getCliente(int.Parse(id));
+                var cliente = controladorCliente.getCliente(int.Parse(id)); // Obtiene el cliente seleccionado
                 if (cliente != null)
                 {
-                    var nuevaPantalla = new FrmEditarUsuario(cliente);
+                    var nuevaPantalla = new FrmEditarUsuario(cliente); // Permite acceder a la pantalla de editar Usuarios o Clientes
                     nuevaPantalla.Show();
                     this.Hide();
                 }
@@ -96,7 +96,7 @@ namespace Proyecto1.Vista
 
         }
 
-        private void btnEliminar_Click(object sender, EventArgs e)
+        private void btnEliminar_Click(object sender, EventArgs e) //Método en el botón para eliminar clientes
         {
             var listaClientes = controladorCliente.obtenerClientes();
             if (listView1.SelectedItems.Count > 0)
@@ -106,16 +106,16 @@ namespace Proyecto1.Vista
                 {
 
                     int id = int.Parse(item.SubItems[0].Text);
-                    var cliente = listaClientes.FirstOrDefault(c => c.Id == id);
+                    var cliente = listaClientes.FirstOrDefault(c => c.Id == id); // Encuentra al cliente por ID
                     if (cliente != null)
                     {
-                        listaClientes.Remove(cliente);
+                        listaClientes.Remove(cliente); // Elimina al cliente de la lista 
                     }
 
 
-                    listView1.Items.Remove(item);
+                    listView1.Items.Remove(item); // Eliminar al cliente de la listview
                 }
-                controladorCliente.ActualizarListaCliente();
+                controladorCliente.ActualizarListaCliente(); // Actualiza la lista de clientes 
                 MessageBox.Show("Cliente eliminado exitosamente.");
             }
             else
@@ -129,7 +129,7 @@ namespace Proyecto1.Vista
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e) // Método para acceder al historial de compras del cliente 
         {
             if (listView1.SelectedItems.Count == 1)
             {
@@ -138,7 +138,7 @@ namespace Proyecto1.Vista
                 var cliente = controladorCliente.getCliente(int.Parse(id));
                 if (cliente != null)
                 {
-                    var nuevaPantalla = new FrmHistorialCliente(cliente);
+                    var nuevaPantalla = new FrmHistorialCliente(cliente); // Muestra una pantalla para ver el historial de clientes 
                     nuevaPantalla.Show();
                     this.Hide();
                 }

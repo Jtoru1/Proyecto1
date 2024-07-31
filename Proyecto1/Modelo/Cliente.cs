@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Proyecto1.Modelo
 {
-    public class Cliente
+    public class Cliente // Atributos necesarios que debe tener e cliente
     {
         public int Id { get; set; }
         public string Nombre { get; set; }
@@ -16,7 +16,7 @@ namespace Proyecto1.Modelo
         public string Numero { get; set; }
         public string Correo { get; set; }
 
-        public string Display => $"{Nombre} - {Correo}";
+        public string Display => $"{Nombre} - {Correo}"; // Método para poder ver el nombre y correo del Cliente en la pantalla 
         public Cliente(int id, string nombre, string apellido, string direccion, string numero, string correo)
         {
             Id = id;

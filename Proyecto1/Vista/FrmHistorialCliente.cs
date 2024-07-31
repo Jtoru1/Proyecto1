@@ -15,21 +15,21 @@ namespace Proyecto1.Vista
     public partial class FrmHistorialCliente : Form
     {
         private Cliente cliente;
-        private ControladorHistorialCliente controladorhistorialcliente;
+        private ControladorHistorialCliente controladorhistorialcliente; // Instancia el controlad de historial de cliente 
 
         public FrmHistorialCliente(Cliente cliente)
         {
-            controladorhistorialcliente = new ControladorHistorialCliente();
+            controladorhistorialcliente = new ControladorHistorialCliente(); // Inicializa el controlador de historial de cliente 
             InitializeComponent();
             this.cliente = cliente;
-            var ventas = controladorhistorialcliente.ObtenerHistorialVentas(this.cliente.Id);
+            var ventas = controladorhistorialcliente.ObtenerHistorialVentas(this.cliente.Id); // Obtiene el historial de ventas del cliente
             lbcliente.Text = "Cliente: " + cliente.Nombre + " " + cliente.Apellido;
             listView1.View = View.Details;
             listView1.Columns.Clear();
             listView1.Columns.Add("ID", 50);
             listView1.Columns.Add("Producto ", 150);
             listView1.Columns.Add("Cantidad", 100);
-            listView1.Columns.Add("Precio Unitario", 100);
+            listView1.Columns.Add("Precio Unitario", 150);
             listView1.Columns.Add("Total", 150);
 
 
@@ -37,12 +37,12 @@ namespace Proyecto1.Vista
             foreach (var factura in ventas)
             {
                 var producto = controladorhistorialcliente.ObtenerProductoPorId(factura.ProductoId);
-                ListViewItem item = new ListViewItem(factura.Id.ToString());
+                ListViewItem item = new ListViewItem(factura.Id.ToString()); // Crea un nuevo item para el listview
                 item.SubItems.Add(producto.Nombre);
                 item.SubItems.Add(factura.Cantidad.ToString());
                 item.SubItems.Add(factura.PrecioUnitario.ToString());
                 item.SubItems.Add(factura.Total.ToString());
-                listView1.Items.Add(item);
+                listView1.Items.Add(item);  // Agrega el item al listview 
             }
         }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Proyecto1.Utilidades
 {
-    public  static class Utilidades
+    public  static class Utilidades //Utilidades necesarias para poder convertir los valores
     {
         public static int StrToIntConDefault(string s, int @default)
         {

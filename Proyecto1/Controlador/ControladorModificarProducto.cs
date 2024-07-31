@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Proyecto1.Controlador
 {
-    internal class ControladorModificarProducto
+    internal class ControladorModificarProducto // Controlador para modificar el producto 
     {
         public void AgregarProducto(Producto producto)
         {

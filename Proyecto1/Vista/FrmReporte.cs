@@ -15,11 +15,11 @@ namespace Proyecto1.Vista
 {
     public partial class FrmReporte : Form
     {
-        private ControladorReportes controladorReportes;
+        private ControladorReportes controladorReportes; // Instancia el controlador de reportes 
         public FrmReporte()
         {
             InitializeComponent();
-            controladorReportes = new ControladorReportes();
+            controladorReportes = new ControladorReportes(); // Inicializa el controlador de reportes 
             this.Load += FrmVenta_load;
 
         }
@@ -31,8 +31,6 @@ namespace Proyecto1.Vista
             listView1.View = View.Details;
             listView1.Columns.Clear();
             listView1.Columns.Add("ID", 50);
-            //listView1.Columns.Add("Producto", 100);
-            //listView1.Columns.Add("Cantidad", 100);
             listView1.Columns.Add("Método de pago", 175);
             listView1.Columns.Add("Fecha de factura", 250);
             listView1.Columns.Add("Monto Total", 150);
@@ -49,7 +47,7 @@ namespace Proyecto1.Vista
 
                 listView1.Items.Add(item);
             }
-            var meses = new List<Mes>
+            var meses = new List<Mes> // Variable para agregar los meses del año 
         {
             new Mes(1, "Enero"),
             new Mes(2, "Febrero"),
@@ -65,14 +63,14 @@ namespace Proyecto1.Vista
             new Mes(12, "Diciembre")
         };
 
-            // Asignar la lista de meses al ComboBox usando DataSource
-            cbmeses.DataSource = meses;
-            cbmeses.DisplayMember = "Nombre";
-            cbmeses.ValueMember = "Numero";
+                                            
+            cbmeses.DataSource = meses; // Asignar la lista de meses al ComboBox usando DataSource
+            cbmeses.DisplayMember = "Nombre"; // Muestr el nombre del mes en combobox
+            cbmeses.ValueMember = "Numero"; // Muestra el número del mes en el combobox 
 
 
 
-            // Agregar los años (puedes personalizar este rango)
+          
             for (int year = DateTime.Now.Year - 10; year <= DateTime.Now.Year; year++)
             {
                 cbanos.Items.Add(year);
@@ -97,26 +95,22 @@ namespace Proyecto1.Vista
 
         private void btncompras_Click(object sender, EventArgs e)
         {
-            cbmeses.Visible = false;
-            cbanos.Visible = false;
-            dateTimePicker1.Visible = false;
+            cbmeses.Visible = false; // Oculta el combobox de meses 
+            cbanos.Visible = false; // Oculta el combobox de años 
+            dateTimePicker1.Visible = false; // Oculta el calendario
             var clientesConMayoresCompras = controladorReportes.ObtenerClientesConMayoresCompras();
-
-            // Limpiar la ListView
             listView1.Items.Clear();
-
-            // Añadir encabezados específicos
             listView1.Columns.Clear();
             listView1.Columns.Add("ID Cliente", 150);
             listView1.Columns.Add("Nombre del Cliente", 250);
             listView1.Columns.Add("Total Compras", 150);
 
-            // Añadir datos
+            
             foreach (var cliente in clientesConMayoresCompras)
             {
                 ListViewItem item = new ListViewItem(cliente.IdCliente);
                 var objetoCliente = controladorReportes.ObtenerClientePorId(int.Parse(cliente.IdCliente));
-                item.SubItems.Add(objetoCliente.Nombre+" "+objetoCliente.Apellido);
+                item.SubItems.Add(objetoCliente.Nombre + " " + objetoCliente.Apellido);
                 item.SubItems.Add(cliente.TotalCompras.ToString("F2"));
                 listView1.Items.Add(item);
             }
@@ -131,18 +125,17 @@ namespace Proyecto1.Vista
             dateTimePicker1.Visible = false;
             var vendedoresConMayoresVentas = controladorReportes.ObtenerVendedoresConMayoresVentas();
 
-            // Limpiar la ListView
-            listView1.Items.Clear();
+            listView1.Items.Clear();  // Limpiar la ListView
 
-            // Añadir encabezados específicos
+
             listView1.Columns.Clear();
-            listView1.Columns.Add("ID Vendedor", 150);
+            listView1.Columns.Add("ID Vendedor", 250);
             listView1.Columns.Add("Total Ventas", 150);
 
-            // Añadir datos
+
             foreach (var vendedor in vendedoresConMayoresVentas)
             {
-                ListViewItem item = new ListViewItem(vendedor.IdVendedor);
+                ListViewItem item = new ListViewItem(vendedor.IdVendedor); // Crea una nueva listview con el ID de vendedor 
                 item.SubItems.Add(vendedor.TotalVentas.ToString("F2"));
                 listView1.Items.Add(item);
             }
@@ -150,21 +143,21 @@ namespace Proyecto1.Vista
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-           
-            Mes mes = (Mes)cbmeses.SelectedItem;
-            int anio = (int)cbanos.SelectedItem;
-            var reporte = controladorReportes.ObtenerVentasPorMesYAño(mes.Numero, anio);
-            listView1.View = View.Details;
+
+            Mes mes = (Mes)cbmeses.SelectedItem; // Obtiene el mes seleccionado del combobox 
+            int anio = (int)cbanos.SelectedItem; // obtiene el año seleccionado del combobox 
+            var reporte = controladorReportes.ObtenerVentasPorMesYAño(mes.Numero, anio); // Obtiene el reporte de ventas para el mes y año 
+            listView1.View = View.Details; // Muestra los detalle de la listview
             listView1.Columns.Clear();
             listView1.Columns.Add("ID", 50);
             listView1.Columns.Add("Método de pago", 175);
             listView1.Columns.Add("Fecha de factura", 250);
             listView1.Columns.Add("Monto Total", 150);
 
-            listView1.Items.Clear();
-            foreach (var factura in reporte)
+            listView1.Items.Clear(); // Actualiza los nuevos datos 
+            foreach (var factura in reporte) // Recorre cada factura en el reporte y agregar los datos al listview 
             {
-                ListViewItem item = new ListViewItem(factura.Id.ToString());
+                ListViewItem item = new ListViewItem(factura.Id.ToString()); // Crea un nuevo item en la listview para cada factura 
                 item.SubItems.Add(factura.MetodoPago.ToString());
                 item.SubItems.Add(factura.Fecha.ToString());
                 item.SubItems.Add(factura.Total.ToString());
@@ -176,39 +169,38 @@ namespace Proyecto1.Vista
 
         private void button2_Click(object sender, EventArgs e)
         {
-            // Limpiar la ListView
-            listView1.Items.Clear();
-            dateTimePicker1.Visible = false;
-            cbmeses.Visible = true;
-            cbanos.Visible = true;
+
+            listView1.Items.Clear(); // Limpiar la ListView
+            dateTimePicker1.Visible = false; // Esconde el calendario de la pantalla 
+            cbmeses.Visible = true; // muestra el combobox de los meses 
+            cbanos.Visible = true; // Muestra el combo box de los años 
         }
 
         private void btnfiltrofechas_Click(object sender, EventArgs e)
         {
             // Limpiar la ListView
             listView1.Items.Clear();
-            dateTimePicker1.Visible = true;
-            cbmeses.Visible = false;
-            cbanos.Visible = false;
+            dateTimePicker1.Visible = true; // Muestra el calendario de la pantalla
+            cbmeses.Visible = false; // Esconde el combobox de los meses 
+            cbanos.Visible = false; // Esconde el combo box de los años 
         }
         private void DateTimePicker_ValueChanged(object sender, EventArgs e)
         {
-            // Obtener la fecha seleccionada
-            DateTime fechaSeleccionada = dateTimePicker1.Value.Date;
 
-            // Generar el reporte
-            GenerarReportePorFecha(fechaSeleccionada);
+            DateTime fechaSeleccionada = dateTimePicker1.Value.Date; // Obtiene la fecha seleccionada 
+
+
+            GenerarReportePorFecha(fechaSeleccionada); // Genera el reporte por fecha 
         }
         private void GenerarReportePorFecha(DateTime fecha)
         {
-            // Limpiar ListView
-            listView1.Items.Clear();
 
-            // Obtener las facturas de la fecha seleccionada
-            var facturasDeLaFecha = controladorReportes.ObtenerVentasPorFecha(fecha);
+            listView1.Items.Clear(); // Limpiar el listview 
 
-            // Mostrar las facturas en el ListView
-            listView1.View = View.Details;
+
+            var facturasDeLaFecha = controladorReportes.ObtenerVentasPorFecha(fecha); // Obtiene las facturas de la fecha seleccionada 
+
+            listView1.View = View.Details; // Mostrar las facturas en el ListView
             listView1.Columns.Clear();
             listView1.Columns.Add("ID", 50);
             listView1.Columns.Add("Método de pago", 175);

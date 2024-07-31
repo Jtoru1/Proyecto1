@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Proyecto1.Modelo
 {
-    public class Venta
+    public class Venta //Atributos necesarios que debe tener una venta
     {
         public int Id { get; set; }
         public int ProductoId { get; set; }

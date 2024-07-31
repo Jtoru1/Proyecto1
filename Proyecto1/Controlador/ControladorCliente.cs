@@ -8,20 +8,20 @@ using Proyecto1.Modelo;
 
 namespace Proyecto1.Controlador
 {
-    public class ControladorCliente
+    public class ControladorCliente // Controlador del cliente 
     {
-        private List<Cliente> clientes = Datos2.clientes;
+        private List<Cliente> clientes = Datos2.clientes; // Lista obtenida desde la clase Datos
 
         public List<Cliente> obtenerClientes()
         {
             return clientes;
         }
-        public Cliente getCliente(int id)
+        public Cliente getCliente(int id) // Obtener cliente por Id
         {
             return Datos2.ObtenerClientePorId(id);
         }
 
-        public  void ActualizarListaCliente ()
+        public  void ActualizarListaCliente () // Método para para actualizar la lista de clientes desde datos
         {
            Datos2.ActualizarClientes();
         }

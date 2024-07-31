@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Proyecto1.Modelo
 {
-    public class MetodoPago
+    public class MetodoPago //Atributos necesarios del método de pago
     {
         public enum TipoPago
         {

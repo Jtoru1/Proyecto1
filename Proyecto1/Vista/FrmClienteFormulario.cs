@@ -15,13 +15,13 @@ namespace Proyecto1.Vista
 {
     public partial class FrmClienteFormulario : Form
     {
-        private ControladorModificarCliente controladorModificarCliente;
+        private ControladorModificarCliente controladorModificarCliente; // Instancia del controlador Modificar Cliente
 
 
         public FrmClienteFormulario()
         {
             InitializeComponent();
-            controladorModificarCliente = new ControladorModificarCliente();
+            controladorModificarCliente = new ControladorModificarCliente(); // Inicializa el controlador modificar cliente
         }
 
         private void label3_Click(object sender, EventArgs e)
@@ -40,7 +40,7 @@ namespace Proyecto1.Vista
 
         }
 
-        private void btnregistrar_Click(object sender, EventArgs e)
+        private void btnregistrar_Click(object sender, EventArgs e) // Método en el botón para poder registrar un usuario
         {
             string nombre = txtnombre.Text;
             string apellido = txtapellido.Text;
@@ -70,7 +70,7 @@ namespace Proyecto1.Vista
 
             };
             controladorModificarCliente.AgregarCliente(nuevoCliente);
-            var pantallaCliente = new FrmCliente();
+            var pantallaCliente = new FrmCliente(); // Permite acceder a la pantalla general de cliente 
             pantallaCliente.Show();
             this.Hide();
 
@@ -84,7 +84,7 @@ namespace Proyecto1.Vista
 
         private void txttelefono_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar)) // Verifica que solamente se escriban números y no letras u otros caracteres 
             {
                 e.Handled = true;
             }

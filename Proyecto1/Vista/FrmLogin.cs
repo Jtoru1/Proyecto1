@@ -14,16 +14,16 @@ namespace Proyecto1.Vista
 {
     public partial class FrmLogin : Form
     {
-        private LoginController loginController;
+        private LoginController loginController; // Instancia el controlador de inicio de sesión 
         public FrmLogin()
         {
             InitializeComponent();
-            loginController = new LoginController();
+            loginController = new LoginController(); // Inicializa el controlador de inicio de sesión 
             this.FormClosed += Form1_FormClosed;
         }
 
-        public string cajero => txtCorreo.Text;
-        public string Password => txtcontrasena.Text;
+        public string cajero => txtCorreo.Text; // Obtiene el correo del cajero 
+        public string Password => txtcontrasena.Text; // obtiene la contraseña del cajero 
 
         private void btninicio_Click(object sender, EventArgs e)
         {
@@ -32,7 +32,7 @@ namespace Proyecto1.Vista
                 var objetoCajero = loginController.obtenerCajero(cajero);
                 
                 this.Hide();
-                var nuevaPantalla = new FrmInicio(objetoCajero);
+                var nuevaPantalla = new FrmInicio(objetoCajero); // muestr la pantalla de Inicio 
                 nuevaPantalla.Show();
 
             }
@@ -44,7 +44,7 @@ namespace Proyecto1.Vista
         }
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Application.Exit();
+            Application.Exit(); // Sale de la apliación cuando se cierra la pantalla 
         }
 
         private void Form1_Load(object sender, EventArgs e)

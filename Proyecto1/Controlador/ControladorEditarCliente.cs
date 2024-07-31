@@ -9,13 +9,13 @@ using Proyecto1.Datos;
 namespace Proyecto1.Controlador
 {
     
-        public class ControladorEditarCliente 
+        public class ControladorEditarCliente  //Controlador para editar el cliente 
         {
            public ControladorEditarCliente() { }
 
-        public void editarCliente(Cliente cliente)
+        public void editarCliente(Cliente cliente) //Método para editar el cliente desde la lista de datos
         {
-            Datos2.EditarCliente(cliente);
+            Datos2.EditarCliente(cliente); 
         }
         }
     
