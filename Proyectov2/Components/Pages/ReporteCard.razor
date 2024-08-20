@@ -1,0 +1,25 @@
+﻿@using Proyecto1.Modelo
+@using Proyecto1.Controlador
+@inherits ComponentBase
+
+
+<div class="card">
+    <div class="card-body">
+       
+        <p class="card-text">
+            <strong>ID:</strong> @Factura.Id<br />
+            <strong>Método de pago:</strong> @Factura.MetodoPago<br />
+            <strong>Fecha:</strong> @Factura.Fecha<br />
+            <strong>Monto Total:</strong> @Factura.Total.ToString("C0")
+        </p>
+    </div>
+</div>
+
+
+@code {
+   
+    [Parameter]
+    public Factura Factura { get; set; }
+    
+   
+}

@@ -1,0 +1,212 @@
+﻿@page "/"
+
+ @* @using Proyectov2.Services;
+@inject AuthService authService *@
+@using Proyecto1.Controlador
+@* @inject LoginController loginController *@
+@inject NavigationManager Navigation
+
+<div class="login">
+    <div class="login-triangle"></div>
+    <h2 class="login-header">Iniciar Sesión</h2>
+
+    <EditForm Model="loginModel" OnValidSubmit="HandleValidSubmit" FormName="LoginForm">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="login-container">
+            <p><InputText @bind-Value="loginModel.Correo" type="email" placeholder="Correo"></InputText></p>
+            <p><InputText @bind-Value="loginModel.Contrasena" type="password" placeholder="Contraseña"></InputText></p>
+            <p><button type="submit">Ingresar</button></p>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    private LoginModel loginModel = new LoginModel();
+
+    private void HandleValidSubmit()
+    {
+        // Aquí puedes agregar la lógica de autenticación
+        // Si la autenticación es exitosa:
+        Navigation.NavigateTo("/home");
+    }
+
+    public class LoginModel
+    {
+        public string Correo { get; set; }
+        public string Contrasena { get; set; }
+    }
+
+}
+
+ 
+
+@* <div>
+    <label for="username">Usuario:</label>
+    <input id="username" @bind="username" />
+
+    <label for="password">Contraseña:</label>
+    <input id="password" type="password" @bind="password" />
+
+    <button @onclick="LoginCajero">Iniciar Sesión</button>
+</div>
+
+@if (loginFailed)
+{
+    <p style="color:red;">Usuario o contraseña incorrectos.</p>
+}
+@code {
+    private string username;
+    private string password;
+    private bool loginFailed;
+
+    private async Task LoginCajero()
+    {
+        // Utilizar el controlador para autenticar el usuario
+        bool isAuthenticated = loginController.autenticarUsuario(username, password);
+
+        if (isAuthenticated)
+        {
+            // Redirigir a la página principal después del inicio de sesión exitoso
+            Navigation.NavigateTo("/home");
+        }
+        else
+        {
+            // Mostrar mensaje de error
+            loginFailed = true;
+        }
+    }
+} *@
+<style>
+    body {
+        background: #456;
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    .login {
+        width: 400px;
+        margin: 16px auto;
+        font-size: 16px;
+    }
+
+        /* Reset top and bottom margins from certain elements */
+        .login-header,
+        .login p {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+    /* The triangle form is achieved by a CSS hack */
+    .login-triangle {
+        width: 0;
+        margin-right: auto;
+        margin-left: auto;
+        border: 12px solid transparent;
+        border-bottom-color: #28d;
+    }
+
+    .login-header {
+        background: #28d;
+        padding: 20px;
+        font-size: 1.4em;
+        font-weight: normal;
+        text-align: center;
+        text-transform: uppercase;
+        color: #fff;
+    }
+
+    .login-container {
+        background: #ebebeb;
+        padding: 12px;
+    }
+
+    /* Every row inside .login-container is defined with p tags */
+    .login p {
+        padding: 12px;
+    }
+
+    .login input {
+        box-sizing: border-box;
+        display: block;
+        width: 100%;
+        border-width: 1px;
+        border-style: solid;
+        padding: 16px;
+        outline: 0;
+        font-family: inherit;
+        font-size: 0.95em;
+    }
+
+        .login input[type="email"],
+        .login input[type="password"] {
+            background: #fff;
+            border-color: #bbb;
+            color: #555;
+        }
+
+            /* Text fields' focus effect */
+            .login input[type="email"]:focus,
+            .login input[type="password"]:focus {
+                border-color: #888;
+            }
+
+        .login input[type="submit"] {
+            background: #28d;
+            border-color: transparent;
+            color: #fff;
+            cursor: pointer;
+        }
+
+            .login input[type="submit"]:hover {
+                background: #17c;
+            }
+
+            /* Buttons' focus effect */
+            .login input[type="submit"]:focus {
+                border-color: #05a;
+            }
+
+</style> 
+
+@*           
+ @inject AuthService authService
+
+<div class="login-container">
+    <h2>Iniciar Sesión</h2>
+    <EditForm Model="@loginModel" OnValidSubmit="@HandleLogin">
+        <div class="input-group">
+            <label for="username">Usuario:</label>
+            <InputText id="username" @bind-Value="loginModel.Username" required />
+        </div>
+        <div class="input-group">
+            <label for="password">Contraseña:</label>
+            <InputText id="password" @bind-Value="loginModel.Password" type="password" required />
+        </div>
+        <button type="submit">Iniciar Sesión</button>
+    </EditForm>
+</div>
+
+@code {
+    private LoginModel loginModel = new LoginModel();
+
+    private async Task HandleLogin()
+    {
+        bool isAuthenticated = await authService.LoginAsync(loginModel.Username, loginModel.Password);
+        if (isAuthenticated)
+        {
+            // Redirigir a la página principal después de una autenticación exitosa
+            Navigation.NavigateTo("/mainpage");
+        }
+        else
+        {
+            // Mostrar un mensaje de error si la autenticación falla
+        }
+    }
+
+    public class LoginModel
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
+}  *@

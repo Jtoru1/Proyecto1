@@ -1,0 +1,165 @@
+﻿@using Proyecto1.Modelo
+@using Proyecto1.Controlador
+@inherits ComponentBase
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">@Cliente.Nombre @Cliente.Apellido</h5>
+        <p class="card-text">
+            <strong>ID:</strong> @Cliente.Id<br />
+            <strong>Dirección:</strong> @Cliente.Direccion<br />
+            <strong>Número:</strong> @Cliente.Numero<br />
+            <strong>Correo:</strong> @Cliente.Correo
+        </p>
+        <ul class="list-inline m-0">
+            <li class="list-inline-item">
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="@($"#editarClienteModal-{Cliente.Id}")">
+                    <Icon Name="IconName.Pencil" /> Editar
+                </button>
+            </li>
+            <li class="list-inline-item">
+                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="@($"#eliminarClienteModal-{Cliente.Id}")">
+                    <Icon Name="IconName.Trash" /> Eliminar
+                </button>
+            </li>
+            <li class="list-inline-item">
+                <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="@($"#historialComprasModal-{Cliente.Id}")">
+                    <Icon Name="IconName.FileText" /> Historial de Compras
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- Modal para editar cliente -->
+<div class="modal fade" id="@($"editarClienteModal-{Cliente.Id}")" tabindex="-1" aria-labelledby="editarClienteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="editarClienteModalLabel">Editar Cliente</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editarClienteForm">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nuevo Nombre</label>
+                        <input type="text" class="form-control" id="nombre" @bind="Cliente.Nombre" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="apellido" class="form-label">Nuevo Apellido</label>
+                        <input type="text" class="form-control" id="apellido" @bind="Cliente.Apellido" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="direccion" class="form-label">Nueva Dirección</label>
+                        <input type="text" class="form-control" id="direccion" @bind="Cliente.Direccion" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="numero" class="form-label">Nuevo Número</label>
+                        <input type="text" class="form-control" id="numero" @bind="Cliente.Numero" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="correo" class="form-label">Nuevo Correo</label>
+                        <input type="email" class="form-control" id="correo" @bind="Cliente.Correo" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" @onclick="GuardarCambios">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para eliminar cliente -->
+<div class="modal fade" id="@($"eliminarClienteModal-{Cliente.Id}")" tabindex="-1" aria-labelledby="eliminarClienteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="eliminarClienteModalLabel">¿Desea Eliminar el Cliente?</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" @onclick="EliminarCliente">Eliminar Cliente</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal para historial de compras -->
+<div class="modal fade" id="@($"historialComprasModal-{Cliente.Id}")" tabindex="-1" aria-labelledby="historialComprasModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="historialComprasModalLabel">Historial de Compras</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if (facturas != null && facturas.Any())
+                {
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Precio</th>
+                                <th>Total </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var compra in facturas)
+                            {
+                                <tr>
+                                    <td>@compra.Id</td>
+                                    <td>@(ObtenerNombreProducto(compra.ProductoId))</td>
+                                    <td>@compra.Cantidad</td>
+                                    <td>@compra.PrecioUnitario.ToString("C0")</td>
+                                    <td>@compra.Total.ToString("C0")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p>No se encontraron compras.</p>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+@code {
+    private ControladorHistorialCliente controladorHistorialCliente;
+    public List<Venta> facturas;
+
+    [Parameter]
+    public Cliente Cliente { get; set; }
+    protected override void OnInitialized()
+    {
+
+        controladorHistorialCliente = new ControladorHistorialCliente();
+        facturas = controladorHistorialCliente.ObtenerHistorialVentas(Cliente.Id);
+
+    }
+    private string ObtenerNombreProducto(int productoId)
+    {
+        var producto = controladorHistorialCliente.ObtenerProductoPorId(productoId);
+        return producto?.Nombre ?? "Desconocido";
+    }
+    private void GuardarCambios()
+    {
+        // Lógica para guardar los cambios realizados en el cliente.
+    }
+
+    private void EliminarCliente()
+    {
+        // Lógica para eliminar el cliente.
+    }
+}

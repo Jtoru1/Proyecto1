@@ -64,6 +64,15 @@ namespace Proyecto1.Controlador
             factura.MetodoPago = metodoPago;
             Datos2.AgregarFactura(factura);
         }
+        public void eliminarVenta(int ventaId)
+        {
+            var venta = preventa.FirstOrDefault(v => v.Id == ventaId);
+            if (venta != null)
+            {
+                preventa.Remove(venta);
+            }
+            // Opcionalmente, guardar los cambios si estás manejando persistencia
+        }
 
     }
 }

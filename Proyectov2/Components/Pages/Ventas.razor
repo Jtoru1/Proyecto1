@@ -1,0 +1,277 @@
+﻿@page "/ventas"
+@rendermode InteractiveServer
+@using Proyecto1.Modelo
+@using Proyecto1.Controlador
+<h3>Ventas</h3>
+<br />
+
+<div class="container text-center">
+    <div class="row">
+        <div class="mb-3">
+            <label for="clientes" class="form-label">Lista de Clientes</label>
+            <select id="Clientedropdown" class="form-select" @bind="clienteSeleccionado">
+                @foreach (var cliente in clientes)
+                {
+                    <option value="@cliente.Id">@cliente.Display</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="productos" class="form-label">Lista de Productos</label>
+            <select id="Productodropdown" class="form-select" @bind="productoSeleccionado">
+                @foreach (var producto in productos)
+                {
+                    <option value="@producto.Id">@producto.Display</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-4">
+            <div class="d-inline-block">
+                <div class="form-group d-inline-block me-3">
+                    <label for="cantidadInput" class="cantidad-label">Cantidad Deseada:</label>
+                    <input type="number" id="cantidadInput" min="1" class="form-control cantidad-input d-inline-block" @bind="cantidad" />
+                </div>
+                <br />
+                <br />
+                <div class="mb-3">
+                    <label for="paymentOption" class="form-label">Método de Pago</label>
+                    <select id="paymentOption" class="form-select" @bind="selectedPaymentOption">
+                        @foreach (var option in paymentOptions)
+                        {
+                            <option value="@option">@option</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Botón para agregar la venta -->
+    <button class="btn btn-success" @onclick="AgregarVenta">Agregar Venta</button>
+    
+    <br />
+    <br />
+    <h4>Lista de Productos Agregados</h4>
+    @if (preventas != null && preventas.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Descripción</th>
+                    <th>Cantidad</th>
+                    <th>Precio Individual</th>
+                    <th>Precio Total</th>
+                    <th>Eliminar de Lista</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var venta in preventas)
+                {
+                    var producto = controladorVenta.getProducto(venta.ProductoId);
+                    <tr>
+                        <td>@producto?.Nombre</td>
+                        <td>@producto.Descripcion</td>
+                        <td>@venta.Cantidad</td>
+                        <td>@venta.PrecioUnitario.ToString("C0")</td>
+                        <td>@venta.Total.ToString("C0")</td>
+                        <td>
+                            <button class="btn btn-danger" @onclick="() => EliminarVenta(venta.Id)">Eliminar</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No hay elementos para mostrar.</p>
+    }
+    <div class="container">
+        @if (!string.IsNullOrEmpty(ErrorMessage))
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error:</strong> @ErrorMessage
+                <button type="button" class="btn-close" @onclick="ClearErrorMessage" aria-label="Close"></button>
+            </div>
+        }
+
+        <!-- Aquí puedes agregar más contenido de la página -->
+
+    </div>
+    <div style="text-align: right; max-width: 300px; margin-left: auto;">
+        <table style="width: 100%;">
+            <tr>
+                <th>Factura</th>
+            </tr>
+            <tr>
+                <td>Método de Pago</td>
+                <td>@selectedPaymentOption</td>
+            </tr>
+            <tr>
+                <td>Total a Pagar</td>
+                <td>@Total.ToString("C0")</td>
+            </tr>
+        </table>    
+        
+        <div style="text-align: left; margin-top: 10px;">
+            <button class="btn btn-success">Realizar Factura </button>
+        </div>
+
+    </div>
+</div>
+
+
+
+@code {
+    double Total = 0;
+
+    private List<Cliente> clientes { get; set; }
+    private ControladorCliente controladorCliente;
+    private List<Producto> productos { get; set; }
+    private ControladorProducto controladorProducto;
+    private ControladorVenta controladorVenta;
+    private List<Venta> preventas = new List<Venta>();
+    private int cantidad;
+    private int clienteSeleccionado { get; set; }
+    private int productoSeleccionado { get; set; }
+    protected override void OnInitialized()
+    {
+        controladorCliente = new ControladorCliente();
+        clientes = controladorCliente.obtenerClientes();
+        controladorProducto = new ControladorProducto();
+        productos = controladorProducto.obtenerProductos();
+        controladorVenta = new ControladorVenta();
+        preventas = controladorVenta.ObtenerPreventa();
+        clienteSeleccionado = clientes.FirstOrDefault()?.Id ?? 0;
+        productoSeleccionado = productos.FirstOrDefault()?.Id ?? 0;
+
+    }
+    private MetodoPago.TipoPago selectedPaymentOption = MetodoPago.TipoPago.Efectivo; // Opción seleccionada por defecto
+    private List<MetodoPago.TipoPago> paymentOptions = new List<MetodoPago.TipoPago>
+    {
+        MetodoPago.TipoPago.Efectivo,MetodoPago.TipoPago.Tarjeta,MetodoPago.TipoPago.Transferencia
+    };
+    private string ErrorMessage { get; set; }
+
+    private void ClearErrorMessage()
+    {
+        ErrorMessage = string.Empty; // Limpia el mensaje de error
+    }
+    private void AgregarVenta()
+    {
+
+
+        if (cantidad <= 0)
+        {
+            ErrorMessage = "Ha ocurrido un error inesperado.";
+            return;
+        }
+
+        // Obtén el producto seleccionado (cambia según cómo lo seleccionas)
+        var producto = controladorVenta.getProducto(productoSeleccionado); // Ajusta según tu implementación
+
+        if (producto != null && producto.Cantidad >= cantidad)
+
+        {
+            var venta = new Venta
+                {
+                    Cantidad = cantidad,
+                    ProductoId = producto.Id,
+                    PrecioUnitario = producto.Precio
+
+                };
+
+            controladorVenta.agregarVenta(venta);
+            preventas = controladorVenta.ObtenerPreventa();
+            ActualizarTotal();
+
+        }
+        else
+        {
+            ErrorMessage = "Ingrese una cantidad que no exceda a la cantidad actual.";
+        }
+    }
+    private void EliminarVenta(int ventaId)
+    {
+        // Lógica para eliminar la venta de la lista
+        controladorVenta.eliminarVenta(ventaId);
+        preventas = controladorVenta.ObtenerPreventa(); // Actualiza la lista de preventas
+        ActualizarTotal();
+    }
+    private void ActualizarTotal()
+    {
+        Total = 0;
+        foreach (var preventa in preventas)
+        {
+            Total = Total + preventa.Total;
+        }
+    }
+
+}
+<style>
+    .cantidad-input {
+        width: 80px; /* Ajusta el ancho del input */
+        padding: 5px;
+        text-align: center; /* Centra el texto dentro del input */
+        border-radius: 5px; /* Redondea ligeramente las esquinas */
+        
+    }
+
+    .quantity-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .quantity-label {
+        margin-right: 10px;
+        color: blue;
+        font-weight: bold;
+        font-size: 30px;
+    }
+
+    .quantity-input {
+        width: 50px; /* Ajuste para que sea más cuadrado */
+        text-align: center;
+
+    }
+
+    .cantidad-input {
+        color: blue;
+        font-weight: bold;
+        font-size: 20px; /* Puedes ajustar el tamaño de la letra aquí */
+        width: 100px; /* Ajusta el tamaño del input para que sea un cuadrado */
+        padding: 5px; /* Ajusta el padding para centrar el texto */
+    }
+
+    .cantidad-label {
+        color: var(--bs-primary); /* Utiliza el color primario de Bootstrap */
+        font-weight: bold;
+        font-size: 16px; /* Puedes ajustar el tamaño de la letra aquí */
+    }
+
+    .me-3 {
+        margin-right: 1rem; /* Ajusta el margen derecho para crear espacio entre el dropdown y el campo de cantidad */
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 200px; /* Ajusta el ancho según sea necesario */
+    }
+
+    th, td {
+       
+        padding: 8px;
+        text-align: left;
+    }
+
+    button {
+        background-color: #4CAF50; /* Verde */
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+    }
+</style>

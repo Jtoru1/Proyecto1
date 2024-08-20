@@ -1,0 +1,245 @@
+﻿@page "/reportes"
+@rendermode InteractiveServer
+@using Proyecto1.Modelo;
+@using Proyecto1.Controlador;
+<h3>Lista de Facturas</h3>
+<br />
+<div class="d-flex justify-content-start mb-3">
+    <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#mayoresComprasModalLabel">
+        Clientes con Mayores Compras
+    </button>
+    <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#mayoresVentasModalLabel">
+        Vendedores con Mayores Ventas
+    </button>
+    <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#ventasFechaModalLabel">
+        Filtrar Ventas por Fecha
+    </button>
+    <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#ventasMesyAnioModalLabel">
+        Filtrar Ventas por Fecha y Año
+    </button>
+
+</div>
+@foreach (var reporte in facturas)
+{
+    <ReporteCard Factura="reporte" />
+   
+
+}
+
+<div class="modal fade" id="mayoresComprasModalLabel" tabindex="-1" aria-labelledby="mayoresComprasModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="mayoresComprasModalLabel">Clientes con Mayores Compras</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if (mayoresCompras != null && mayoresCompras.Any())
+                {
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre del cliente</th>
+                                <th>Total de Compras</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var clienteMayoresCompras in mayoresCompras)
+                            {
+
+                                var objetoCliente = controladorReportes.ObtenerClientePorId(int.Parse(clienteMayoresCompras.IdCliente));
+                                <tr>
+                                    <td>@clienteMayoresCompras.IdCliente</td>
+                                    <td>@(objetoCliente.Nombre + " " + objetoCliente.Apellido)</td>
+                                    <td>@Math.Truncate(clienteMayoresCompras.TotalCompras).ToString("C0")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p>No se encontraron compras.</p>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal">Descargar Reporte</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="mayoresVentasModalLabel" tabindex="-1" aria-labelledby="mayoresVentasModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="mayoresVentasModalLabel">Vendedores con Mayores Ventas</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if (mayoresVentas != null && mayoresVentas.Any())
+                {
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID Vendedor</th>
+                                <th>Total de Ventas</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var vendedor in mayoresVentas)
+                            {
+                            
+                                <tr>
+                                    <td>@vendedor.IdCajero</td>                             
+                                    <td>@Math.Truncate(vendedor.TotalVentas).ToString("C0")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p>No se encontraron compras.</p>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal">Descargar Reporte</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ventasFechaModalLabel" tabindex="-1" aria-labelledby="ventasFechaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ventasFechaModalLabel">Filtrar Ventas por Fecha</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <input type="date" @onchange="OnFechaChanged" class="form-control" />
+
+                @foreach (var facturaFecha in facturasFechas)
+                {
+                    <ReporteCard Factura="facturaFecha" />
+                }
+                <div class="card">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal">Descargar Reporte</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ventasMesyAnioModalLabel" tabindex="-1" aria-labelledby="ventasMesyAnioModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ventasMesyAnioModalLabel">Filtrar Ventas por Mes y Año"</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+                <input type="month" @onchange="OnFechaMesyAnio" class="form-control" />
+                @foreach (var facturaFecha in facturasMesyAnio)
+                {
+                    <ReporteCard Factura="facturaFecha" />
+                }
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal">Descargar Reporte</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+    
+
+@code {
+    private List<Factura> facturasFechas;
+    private List<Factura> facturasMesyAnio;
+    private List<Factura> facturas { get; set; }
+    private ControladorReportes controladorReportes;
+    private List<(String IdCliente, double TotalCompras)> mayoresCompras;
+    private List<(String IdCajero, double TotalVentas)> mayoresVentas;
+    protected override void OnInitialized()
+
+
+    {
+        facturasFechas = new List <Factura>();
+        controladorReportes = new ControladorReportes();
+        mayoresCompras = controladorReportes.ObtenerClientesConMayoresCompras();
+        mayoresVentas = controladorReportes.ObtenerVendedoresConMayoresVentas();
+        facturas = controladorReportes.ObtenerFacturas();
+        facturasMesyAnio = new List<Factura>();
+
+    }
+    private bool isModalVisible;
+
+    private void OpenModal()
+    {
+        isModalVisible = true;
+    }
+
+    private void CloseModal()
+    {
+        isModalVisible = false;
+    }
+    private void ObtenerClientesConMayoresCompras()
+    {
+        var clientesConMayoresCompras = controladorReportes.ObtenerClientesConMayoresCompras();
+    }
+    private Cliente ObtenerCliente (int id)
+    {
+        return controladorReportes.ObtenerClientePorId(id);
+
+    }
+    private void ObtenerCajeroConMayoresVentas()
+    {
+        var cajeroConMayoresVentas = controladorReportes.ObtenerVendedoresConMayoresVentas();
+    }
+    private List<Factura>ObtenerVentasPorFecha(DateTime fecha)
+    {
+        return controladorReportes.ObtenerVentasPorFecha(fecha);
+    }
+    private async Task OnFechaChanged(ChangeEventArgs e)
+    {      
+        // Convertir el valor del input a DateTime
+        if (DateTime.TryParse(e.Value.ToString(), out DateTime fecha))
+        {
+
+            // Obtener las ventas para la fecha seleccionada
+            facturasFechas =  ObtenerVentasPorFecha(fecha);
+            StateHasChanged(); // Actualiza la interfaz de usuario
+        }
+    }
+    private async Task OnFechaMesyAnio(ChangeEventArgs e)
+    {
+        // El valor del input de tipo month será en formato "YYYY-MM"
+        string valorMesYAnio = e.Value.ToString();
+
+        // Dividir el valor para obtener el año y el mes por separado
+        string[] partes = valorMesYAnio.Split('-');
+        int anio = int.Parse(partes[0]);
+        int mes = int.Parse(partes[1]);
+        facturasMesyAnio = controladorReportes.ObtenerVentasPorMesYAño(mes, anio);
+        StateHasChanged();
+    }
+}
