@@ -1,0 +1,103 @@
+﻿@using Proyecto1.Modelo
+@using Proyecto1.Controlador
+@inherits ComponentBase
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">@Producto.Nombre</h5>
+        <p class="card-text">
+            <strong>ID:</strong> @Producto.Id<br />
+            <strong>Descripción:</strong> @Producto.Descripcion<br />
+            <strong>Precio:</strong> @Producto.Precio.ToString("C0")<br />
+            <strong>Cantidad:</strong> @Producto.Cantidad
+        </p>
+        <ul class="list-inline m-0">
+            <li class="list-inline-item">
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="@($"#editarProductoModal-{Producto.Id}")">
+                    <Icon Name="IconName.Pencil" /> Editar
+                </button>
+            </li>
+            <li class="list-inline-item">
+                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="@($"#eliminarProductoModal-{Producto.Id}")">
+                    <Icon Name="IconName.Trash" /> Eliminar
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- Modal para editar producto -->
+<div class="modal fade" id="@($"editarProductoModal-{Producto.Id}")" tabindex="-1" aria-labelledby="editarProductoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="editarProductoModalLabel">Editar Producto</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editarProductoForm">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nuevo Nombre</label>
+                        <input type="text" class="form-control" id="nombre" @bind="Producto.Nombre" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Nueva Descripción</label>
+                        <input type="text" class="form-control" id="descripcion" @bind="Producto.Descripcion" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="precio" class="form-label">Nuevo Precio</label>
+                        <input type="text" class="form-control" id="precio" @bind="Producto.Precio" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="cantidad" class="form-label">Nueva Cantidad</label>
+                        <input type="text" class="form-control" id="cantidad" @bind="Producto.Cantidad" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" @onclick="GuardarCambios">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para eliminar producto -->
+<div class="modal fade" id="@($"eliminarProductoModal-{Producto.Id}")" tabindex="-1" aria-labelledby="eliminarProductoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="eliminarProductoModalLabel">¿Desea Eliminar el Producto?</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="EliminarProducto">Eliminar Producto</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Producto Producto { get; set; }
+    [Parameter]
+    public EventCallback OnProductoEliminado { get; set; }
+
+    private ControladorProducto controladorProducto = new ControladorProducto();
+
+    private void GuardarCambios()
+    {
+        // Lógica para guardar los cambios realizados en el producto.
+    }
+
+    private async Task EliminarProducto()
+    {
+        controladorProducto.EliminarProducto(Producto.Id);
+        await OnProductoEliminado.InvokeAsync(); // Notifica al componente padre
+
+
+    }
+
+}

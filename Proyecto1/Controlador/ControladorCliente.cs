@@ -25,5 +25,14 @@ namespace Proyecto1.Controlador
         {
            Datos2.ActualizarClientes();
         }
+        public void EliminarCliente(int clienteId)
+        {
+            var cliente = clientes.FirstOrDefault(p => p.Id == clienteId);
+            if (cliente != null)
+            {
+                clientes.Remove(cliente);
+                Datos2.ActualizarClientes();
+            }
+        }
     }
 }

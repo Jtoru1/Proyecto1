@@ -1,0 +1,43 @@
+﻿@page "/"
+@namespace Proyectov2
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Microsoft.AspNetCore.Components.TagHelpers
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blazor Server App</title>
+    <link href="css/app.css" rel="stylesheet" />
+</head>
+<body>
+    <app>Loading...</app>
+
+    <!-- Scripts de Blazor -->
+    <script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>
+    <script src="/_framework/blazor.server.js"></script>
+    
+    <!-- Script personalizado -->
+    <script>
+        window.downloadFile = function (fileName, base64Data) {
+            const byteCharacters = atob(base64Data);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        };
+    </script>
+</body>
+</html>

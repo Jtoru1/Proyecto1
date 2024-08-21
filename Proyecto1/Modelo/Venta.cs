@@ -13,5 +13,6 @@ namespace Proyecto1.Modelo
         public int Cantidad { get; set; }
         public double PrecioUnitario { get; set; }
         public double Total => Cantidad * PrecioUnitario;
+
     }
 }

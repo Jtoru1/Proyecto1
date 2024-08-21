@@ -119,11 +119,13 @@ namespace Proyecto1.Vista
             }
             double total = cantidad * productoSeleccionado.Precio; // Calcula el total de la venta 
             var venta = new Venta(); // Crear una nueva venta con los datos actualizados 
+            venta.Id = 
             venta.Cantidad = cantidad;
             venta.ProductoId = productoSeleccionado.Id;
             venta.PrecioUnitario = productoSeleccionado.Precio;
             controladorVenta.agregarVenta(venta);
             CargarListaVentas(); // Actualiza la lista de ventas en la pantalla 
+            
 
 
         }

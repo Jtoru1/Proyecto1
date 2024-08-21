@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Proyecto1.Controlador
 {
     public class ControladorVenta  // Controlador de venta 
@@ -44,7 +45,7 @@ namespace Proyecto1.Controlador
         }
         public void  agregarVenta(Venta venta) // Método para agregar una venta 
         {
-            venta.Id= IdPreVenta(); 
+            venta.Id = IdPreVenta();
             preventa.Add(venta);
         }
         public List<Venta> ObtenerPreventa()
@@ -64,6 +65,22 @@ namespace Proyecto1.Controlador
             factura.MetodoPago = metodoPago;
             Datos2.AgregarFactura(factura);
         }
+        public void eliminarVenta(int ventaId)
+        {
+            var venta = preventa.FirstOrDefault(v => v.Id == ventaId);
+            if (venta != null)
+            {
+                preventa.Remove(venta);
+            }
+            // Opcionalmente, guardar los cambios si estás manejando persistencia
+        }
+        public int ObtenerPreventaId()
+        { 
+            var random = new Random();  
+            return random.Next();
+
+        }
+        
 
     }
 }

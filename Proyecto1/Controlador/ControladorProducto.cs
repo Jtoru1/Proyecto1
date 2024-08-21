@@ -40,5 +40,14 @@ namespace Proyecto1.Controlador
         {
             Datos2.ActualizarProductos();
         }
+        public void EliminarProducto(int productoId)
+        {
+            var producto = productos.FirstOrDefault(p => p.Id == productoId);
+            if (producto != null)
+            {
+                productos.Remove(producto);
+                Datos2.ActualizarProductos();
+            }
+        }
     }
 }

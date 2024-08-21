@@ -1,0 +1,107 @@
+﻿@page "/inventarios"
+@using Proyecto1.Modelo;
+@using Proyecto1.Controlador;
+@rendermode InteractiveServer
+<h3>Lista de Inventario</h3>
+<br />
+<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarProductoModal">
+    Agregar Nuevo Producto
+</button>
+<br />
+<br style="height:" />
+@foreach (var producto in productos)
+{
+    <InventariosCard Producto="producto" OnProductoEliminado="OnProductoEliminado" />
+
+}
+<!-- Modal -->
+<div class="modal fade" id="agregarProductoModal" tabindex="-1" aria-labelledby="agregarProductoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="agregarProductoModalLabel">Agregar Nuevo Producto</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario para agregar nuevo producto -->
+                <EditForm Model="@nuevoProducto" OnValidSubmit="GuardarProducto">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <InputText class="form-control" id="nombre" @bind-Value="nuevoProducto.Nombre" />
+                        <ValidationMessage For="@(() => nuevoProducto.Nombre)" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <InputText class="form-control" id="descripcion" @bind-Value="nuevoProducto.Descripcion" />
+                        <ValidationMessage For="@(() => nuevoProducto.Descripcion)" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="precio" class="form-label">Precio</label>
+                        <InputNumber class="form-control" id="precio" @bind-Value="nuevoProducto.Precio" />
+                        <ValidationMessage For="@(() => nuevoProducto.Precio)" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="cantidad" class="form-label">Cantidad</label>
+                        <InputNumber class="form-control" id="cantidad" @bind-Value="nuevoProducto.Cantidad" />
+                        <ValidationMessage For="@(() => nuevoProducto.Cantidad)" />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </EditForm>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@code {
+    private List<Producto> productos { get; set; }
+    private ControladorProducto controladorProducto;
+    private ControladorModificarProducto controladorModificarProducto;
+    private Producto nuevoProducto;
+    protected override void OnInitialized()
+
+    {
+
+        controladorProducto = new ControladorProducto();
+        productos = controladorProducto.obtenerProductos();
+        controladorModificarProducto = new ControladorModificarProducto();
+        nuevoProducto= new Producto();
+    }
+
+    private bool isModalVisible;
+
+    private void OpenModal()
+    {
+        isModalVisible = true;
+    }
+
+    private void CloseModal()
+    {
+        isModalVisible = false;
+    }
+    private void GuardarProducto()
+    {
+        controladorModificarProducto.AgregarProducto(nuevoProducto);
+        productos = controladorProducto.obtenerProductos(); // Actualiza la lista de clientes
+        nuevoProducto = new Producto();
+        StateHasChanged();
+        CloseModal(); // Cierra el modal después de guardar
+
+    }
+    private void OnProductoEliminado()
+    {
+       
+        StateHasChanged();  // Forzar el renderizado del componente
+    }
+
+
+}

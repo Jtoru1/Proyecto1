@@ -15,7 +15,7 @@ namespace Proyecto1.Controlador
             var content = File.ReadAllText(filePath);
             return content;
         }
-        public List<Cajero> CargarCajeros(string path) // Metodo para cargar los cajeros desde un archivo CSV
+        public virtual List<Cajero> CargarCajeros(string path) // Metodo para cargar los cajeros desde un archivo CSV
         {
             var result = new List<Cajero>();
 
