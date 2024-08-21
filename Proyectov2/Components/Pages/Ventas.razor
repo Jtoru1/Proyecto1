@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 @using Proyecto1.Modelo
 @using Proyecto1.Controlador
+@using System;
 @using Proyectov2.Services
 @inject NavigationManager Navigation
 <h3>Ventas</h3>
@@ -178,6 +179,7 @@
         {
             var venta = new Venta
                 {
+                    Id=controladorVenta.ObtenerPreventaId(),
                     Cantidad = cantidad,
                     ProductoId = producto.Id,
                     PrecioUnitario = producto.Precio
@@ -187,6 +189,7 @@
             controladorVenta.agregarVenta(venta);
             preventas = controladorVenta.ObtenerPreventa();
             ActualizarTotal();
+
 
         }
         else

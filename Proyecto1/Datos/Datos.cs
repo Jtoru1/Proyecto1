@@ -1,4 +1,5 @@
-﻿using Proyecto1.Controlador;
+﻿using Microsoft.VisualBasic.ApplicationServices;
+using Proyecto1.Controlador;
 using Proyecto1.Modelo;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using static Proyecto1.Datos.Neo4jBD;
 
 
 namespace Proyecto1.Datos
@@ -19,9 +21,13 @@ namespace Proyecto1.Datos
         public static List<Cliente> clientes = new List<Cliente>();
         public static List<Producto> productos = new List<Producto>();
         public static List<Factura> facturas = new List<Factura>();
+        public static List<Venta> ventas = new List<Venta>();
         private static string archivoClientes = "clientes.csv";
         private static string archivoProductos = "productos.csv";
         private static string archivoFacturas = "ventas.csv";
+        private static Neo4jConnection _neo4jConnection = new Neo4jConnection("bolt://localhost:7687", "neo4j", "12345678");
+
+
         static Datos2 ()
         {
             CargarDatos();
@@ -38,6 +44,7 @@ namespace Proyecto1.Datos
             cliente.Id = IdUsuario();
             clientes.Add(cliente);
             controladorArchivo.guardarClientes(clientes, archivoClientes);
+            _neo4jConnection.AgregarClienteAsync(cliente);
 
         }
         public static void AgregarProducto(Producto producto) // Método para poder agregar el producto 
@@ -45,6 +52,7 @@ namespace Proyecto1.Datos
             producto.Id = IdProducto();
             productos.Add(producto);
             controladorArchivo.guardarProductos(productos, archivoProductos);
+            _neo4jConnection.AgregarProductoAsync(producto);
 
         }
         private static int IdUsuario() // Método agregar un id al usuario
@@ -80,6 +88,17 @@ namespace Proyecto1.Datos
                 return 1;
             }
         }
+        public static int IdVenta ()
+        {
+            if (ventas.Any())
+            {
+                return ventas.Max(c => c.Id) + 1;
+            }
+            else
+            {
+                return 1;
+            }
+        }
 
         public static void EditarCliente(Cliente cliente) // Método para poder editar los datos del cliente 
         {
@@ -94,6 +113,7 @@ namespace Proyecto1.Datos
 
             }
             controladorArchivo.guardarClientes(clientes, archivoClientes); // Se guarda el cliente editado 
+            _neo4jConnection.ActualizarClientesAsync(clientes);
         }
         public static void EditarProducto(Producto producto) // Método para poder editar el producto 
         {
@@ -107,14 +127,17 @@ namespace Proyecto1.Datos
 
             }
             controladorArchivo.guardarProductos(productos, archivoProductos); // Se guarda el producto editado 
+            _neo4jConnection.ActualizarProductosAsync(productos);
         }
         public static void ActualizarClientes () // Método para guardar los clientes actualizados 
         {
             controladorArchivo.guardarClientes(clientes,archivoClientes);
+            _neo4jConnection.ActualizarClientesAsync(clientes);
         }
         public static void ActualizarProductos() // Método para guaradar los productos actualizados
         {
             controladorArchivo.guardarProductos(productos, archivoProductos);
+            _neo4jConnection.ActualizarProductosAsync(productos);   
         }
         public static Cliente ObtenerClientePorId (int id) // Método para obtener el cliente por ID
         {
@@ -130,6 +153,7 @@ namespace Proyecto1.Datos
             facturas.Add(factura);
             ActualizarInventarioProductos(factura.Ventas);
             controladorArchivo.GuardarFacturas(facturas,archivoFacturas);
+            _neo4jConnection.AgregarFacturaAsync(factura);
         }
         private static void ActualizarInventarioProductos(List<Venta> ventas) // Método para actualizar el inventario de los productos 
         {
@@ -147,6 +171,7 @@ namespace Proyecto1.Datos
               
             }
             controladorArchivo.guardarProductos(productos,archivoProductos);
+            _neo4jConnection.ActualizarProductosAsync(productos);
 
         }
     }
