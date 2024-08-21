@@ -2,6 +2,9 @@
 @rendermode InteractiveServer
 @using Proyecto1.Modelo;
 @using Proyecto1.Controlador;
+@using System.Text;
+@using BlazorDownloadFile;
+@inject IJSRuntime JS
 <h3>Lista de Facturas</h3>
 <br />
 <div class="d-flex justify-content-start mb-3">
@@ -65,10 +68,60 @@
                     <p>No se encontraron compras.</p>
                 }
             </div>
+
             <div class="modal-footer">
-                <button type="button" class="btn btn-info" data-bs-dismiss="modal">Descargar Reporte</button>
+                <button type="button" class="btn btn-info" onclick="descargarReporte()">Descargar Reporte</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                
+            </div>
+
+            <script>
+                function descargarReporte() {
+                    // Obtener la tabla
+                    var tabla = document.querySelector('.table');
+
+                    // Crear un array para almacenar los datos
+                    var datos = [];
+
+                    // Recorrer las filas de la tabla (excepto el encabezado)
+                    for (var i = 1; i < tabla.rows.length; i++) {
+                        var fila = tabla.rows[i];
+                        var datosFila = [];
+                        for (var j = 0; j < fila.cells.length; j++) {
+                            datosFila.push(fila.cells[j].innerText);
+                        }
+                        datos.push(datosFila);
+                    }
+
+                    // Convertir los datos a un string con el formato deseado (por ejemplo, CSV)
+                    var csvContent = "data:text/csv;charset=utf-8,ID,Nombre del Cliente,Total de Compras\n" +
+                        datos.map(e => e.join(",")).join("\n");
+
+                    // Crear un enlace de descarga
+                    var encodedUri = encodeURI(csvContent);
+                    var link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download",
+                        "reporte_mayores_compras.txt");
+                    document.body.appendChild(link);
+
+                    // Simular un clic en el enlace
+                    link.click();
+
+                    // Eliminar el enlace
+                    document.body.removeChild(link);
+                }
+            </script>
+            <div class="container">
+                @if (!string.IsNullOrEmpty(ErrorMessage))
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Error:</strong> @ErrorMessage
+                        <button type="button" class="btn-close" @onclick="ClearErrorMessage" aria-label="Close"></button>
+                    </div>
+                }
+
+                <!-- Aquí puedes agregar más contenido de la página -->
+
             </div>
         </div>
     </div>
@@ -88,16 +141,13 @@
                             <tr>
                                 <th>ID Vendedor</th>
                                 <th>Total de Ventas</th>
-
                             </tr>
                         </thead>
                         <tbody>
-
                             @foreach (var vendedor in mayoresVentas)
                             {
-                            
                                 <tr>
-                                    <td>@vendedor.IdCajero</td>                             
+                                    <td>@vendedor.IdCajero</td>
                                     <td>@Math.Truncate(vendedor.TotalVentas).ToString("C0")</td>
                                 </tr>
                             }
@@ -110,13 +160,37 @@
                 }
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-info" data-bs-dismiss="modal">Descargar Reporte</button>
+                <button type="button" class="btn btn-info" onclick="descargarReporteVendedores()">Descargar Reporte</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    function descargarReporteVendedores() {
+        var tabla = document.querySelector('#mayoresVentasModalLabel .table');
+        var datos = [];
+        for (var i = 1; i < tabla.rows.length; i++) {
+            var fila = tabla.rows[i];
+            var datosFila = [];
+            for (var j = 0; j < fila.cells.length; j++) {
+                datosFila.push(fila.cells[j].innerText);
+            }
+            datos.push(datosFila);
+        }
+        var csvContent = "data:text/csv;charset=utf-8,ID del Vendedor,Total de Ventas\n" +
+            datos.map(e => e.join(",")).join("\n");
+        var encodedUri = encodeURI(csvContent);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "reporte_mayores_ventas.txt");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+
 
 <div class="modal fade" id="ventasFechaModalLabel" tabindex="-1" aria-labelledby="ventasFechaModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -126,51 +200,141 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-
                 <input type="date" @onchange="OnFechaChanged" class="form-control" />
-
-                @foreach (var facturaFecha in facturasFechas)
-                {
-                    <ReporteCard Factura="facturaFecha" />
-                }
-                <div class="card">
+                <div id="facturaPorFechas">
+                    @foreach (var facturaFecha in facturasFechas)
+                    {
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="card-text">
+                                    <strong>ID:</strong> <strong class="id-venta">@facturaFecha.Id</strong><br />
+                                    <strong>Método de pago:</strong> <strong class="metodopago-venta">@facturaFecha.MetodoPago</strong><br />
+                                    <strong>Fecha:</strong> <strong class="fecha-venta">@facturaFecha.Fecha</strong><br />
+                                    <strong>Monto Total:</strong> <strong class="total-venta">@facturaFecha.Total.ToString("C0")</strong>
+                                </p>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-info" data-bs-dismiss="modal">Descargar Reporte</button>
+                <button type="button" class="btn btn-info" onclick="descargarReporteFecha()">Descargar Reporte</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    function descargarReporteFecha() {
+        // Obtener el contenedor de las ventas
+        const contenedorVentas = document.getElementById('facturaPorFechas');
+
+        // Obtener los elementos de las ventas dentro del contenedor
+        const ventas = contenedorVentas.querySelectorAll('.card');
+
+        // Crear un array para almacenar los datos
+        const datos = [];
+
+        // Recorrer los elementos de ventas y extraer los datos
+        ventas.forEach(venta => {
+            const id = venta.querySelector('.id-venta').textContent.trim();
+            const metodopago = venta.querySelector('.metodopago-venta').textContent.trim();
+            const fecha = venta.querySelector('.fecha-venta').textContent.trim();
+            const total = venta.querySelector('.total-venta').textContent.trim();
+            datos.push(`${id},${metodopago},${fecha},${total}`);
+        });
+
+        // Convertir los datos a un string con el formato deseado (por ejemplo, CSV)
+        const csvContent = "data:text/csv;charset=utf-8,ID,Método de Pago,Fecha,Total\n" + datos.join("\n");
+
+        // Crear un enlace de descarga
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "reporte_ventas_fecha.txt");
+        document.body.appendChild(link);
+
+        // Simular un clic en el enlace
+        link.click();
+
+        // Eliminar el enlace
+        document.body.removeChild(link);
+    }
+</script>
+
 
 <div class="modal fade" id="ventasMesyAnioModalLabel" tabindex="-1" aria-labelledby="ventasMesyAnioModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="ventasMesyAnioModalLabel">Filtrar Ventas por Mes y Año"</h5>
+                <h5 class="modal-title" id="ventasMesyAnioModalLabel">Filtrar Ventas por Mes y Año</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
             </div>
             <div class="modal-body">
                 <input type="month" @onchange="OnFechaMesyAnio" class="form-control" />
-                @foreach (var facturaFecha in facturasMesyAnio)
-                {
-                    <ReporteCard Factura="facturaFecha" />
-                }
-
+                <div id="facturaMesyAnio">
+                    @foreach (var factura in facturasMesyAnio)
+                    {
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="card-text">
+                                    <strong>ID:</strong> <strong class="id-venta">@factura.Id</strong><br />
+                                    <strong>Método de pago:</strong> <strong class="metodopago-venta">@factura.MetodoPago</strong><br />
+                                    <strong>Fecha:</strong> <strong class="fecha-venta">@factura.Fecha</strong><br />
+                                    <strong>Monto Total:</strong> <strong class="total-venta">@factura.Total.ToString("C0")</strong>
+                                </p>
+                            </div>
+                        </div>
+                    }
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-info" data-bs-dismiss="modal">Descargar Reporte</button>
+                <button type="button" class="btn btn-info" onclick="descargarReporteMesyAnio()">Descargar Reporte</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-
             </div>
         </div>
     </div>
-
 </div>
-    
+
+<script>
+    function descargarReporteMesyAnio() {
+        // Obtener el contenedor de las ventas
+        const contenedorVentas = document.getElementById('facturaMesyAnio');
+
+        // Obtener los elementos de las ventas dentro del contenedor
+        const ventas = contenedorVentas.querySelectorAll('.card');
+
+        // Crear un array para almacenar los datos
+        const datos = [];
+
+        // Recorrer los elementos de ventas y extraer los datos
+        ventas.forEach(venta => {
+            const id = venta.querySelector('.id-venta').textContent.trim();
+            const metodopago = venta.querySelector('.metodopago-venta').textContent.trim();
+            const fecha = venta.querySelector('.fecha-venta').textContent.trim();
+            const total = venta.querySelector('.total-venta').textContent.trim();
+            datos.push(`${id},${metodopago},${fecha},${total}`);
+        });
+
+        // Convertir los datos a un string con el formato deseado (por ejemplo, CSV)
+        const csvContent = "data:text/csv;charset=utf-8,ID,Método de Pago,Fecha,Total\n" + datos.join("\n");
+
+        // Crear un enlace de descarga
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "reporte_ventas_mes_anio.txt");
+        document.body.appendChild(link);
+
+        // Simular un clic en el enlace
+        link.click();
+
+        // Eliminar el enlace
+        document.body.removeChild(link);
+    }
+</script>
+
 
 @code {
     private List<Factura> facturasFechas;
@@ -241,5 +405,12 @@
         int mes = int.Parse(partes[1]);
         facturasMesyAnio = controladorReportes.ObtenerVentasPorMesYAño(mes, anio);
         StateHasChanged();
+    }
+  
+    private string ErrorMessage { get; set; }
+
+    private void ClearErrorMessage()
+    {
+        ErrorMessage = string.Empty; // Limpia el mensaje de error
     }
 }

@@ -1,4 +1,9 @@
-﻿ <div class="top-row ps-3 navbar navbar-dark">
+﻿ @using Proyecto1.Modelo
+ @using Proyecto1.Controlador
+ @using Proyectov2.Services
+ @inject NavigationManager Navigation
+ @rendermode InteractiveServer
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">Proyectov2</a>
     </div>
@@ -8,36 +13,55 @@
 
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="ventas">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Gestión de Ventas
-            </NavLink>
-        </div>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="inventarios">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Gestión de inventarios
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="clientes">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Gestión de Clientes
-            </NavLink>
-        </div>
+        
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="ventas">
+                    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Gestión de Ventas
+                </NavLink>
+            </div>
 
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="inventarios">
+                    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Gestión de inventarios
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="clientes">
+                    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Gestión de Clientes
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="reportes">
+                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Reportes y Análisis
+                </NavLink>
+            </div>
+        
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="reportes">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Reportes y Análisis
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/">
+            <button class="btn btn-link nav-link" @onclick="CerrarSesion">
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Cerrar Sesión
-            </NavLink>
+            </button>
         </div>
-
     </nav>
-</div>  
+</div>
 
 
 
+@code{
+
+    private LoginController loginController;
+    private Cajero cajeroActual;
+    [Inject] private CajeroService cajeroService { get; set; }
+
+    protected override void OnInitialized()
+    {
+        loginController = new LoginController();
+        cajeroActual = loginController.getCajeroActual();
+    }
+    private async Task CerrarSesion()
+    {
+        cajeroService.SetCajeroActual(null);
+        Navigation.NavigateTo("/");
+    }
+}

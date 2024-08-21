@@ -1,7 +1,9 @@
 using Proyectov2.Components;
 using Proyecto1.Modelo;
-//using Proyectov2.Services;
 using Proyecto1.Controlador;
+using BlazorDownloadFile;
+using Proyectov2.Services;
+using static Proyectov2.Components.Layout.MainLayout;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddBlazorBootstrap();
+builder.Services.AddBlazorDownloadFile(); // Cambiado aquí
+builder.Services.AddSingleton<CajeroService>();
 
 var app = builder.Build();
 

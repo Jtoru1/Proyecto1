@@ -1,4 +1,5 @@
 ﻿@using Proyecto1.Modelo
+@using Proyecto1.Controlador
 @inherits ComponentBase
 
 <div class="card">
@@ -71,7 +72,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" @onclick="EliminarProducto">Eliminar Producto</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="EliminarProducto">Eliminar Producto</button>
+
             </div>
         </div>
     </div>
@@ -80,15 +82,21 @@
 @code {
     [Parameter]
     public Producto Producto { get; set; }
+    [Parameter]
+    public EventCallback OnProductoEliminado { get; set; }
+
+    private ControladorProducto controladorProducto = new ControladorProducto();
 
     private void GuardarCambios()
     {
         // Lógica para guardar los cambios realizados en el producto.
     }
 
-    private void EliminarProducto()
+    private async Task EliminarProducto()
     {
-        // Lógica para eliminar el producto.
+        controladorProducto.EliminarProducto(Producto.Id);
+        await OnProductoEliminado.InvokeAsync(); // Notifica al componente padre
+
 
     }
 

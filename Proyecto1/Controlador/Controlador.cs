@@ -15,7 +15,7 @@ namespace Proyecto1.Controlador
         private string nombreArchivo = "UsuarioCajeros.csv"; // Archivo csv que contiene la información de los cajeros
         private ControladorArchivo controladorArchivo = new ControladorArchivo();
         private List<Cajero> cajeros = Datos2.cajeros;
-
+        private Cajero cajeroActual = null;
         public LoginController() { }
         public bool autenticarUsuario (string username, string password) // Método para verificar datos del usuario
         {
@@ -27,6 +27,14 @@ namespace Proyecto1.Controlador
            
             var result = this.controladorArchivo.CargarCajeros(nombreArchivo);
             return result;
+        }
+        public void setCajeroActual (Cajero cajeroActual)
+        {
+            this.cajeroActual = cajeroActual;
+        }
+        public Cajero getCajeroActual()
+        {
+            return this.cajeroActual;
         }
 
         public Cajero obtenerCajero(string username)

@@ -1,12 +1,16 @@
 ﻿@inherits LayoutComponentBase
-
+@using Proyecto1.Modelo
+@using Proyecto1.Controlador
+@using Proyectov2.Services
 <div class="page">
     <div class="sidebar">
-        <NavMenu />
+        @if (cajeroService.GetCajeroActual() != null)
+        {
+            <NavMenu />
+        }
     </div>
 
     <main>
-
         <article class="content px-4">
             @Body
         </article>
@@ -19,3 +23,10 @@
     <a class="dismiss">🗙</a>
 </div>
 
+
+@code {
+    [Inject] private CajeroService cajeroService { get; set; }
+    
+
+   
+}

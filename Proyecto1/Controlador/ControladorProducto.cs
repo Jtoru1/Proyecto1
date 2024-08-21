@@ -46,6 +46,7 @@ namespace Proyecto1.Controlador
             if (producto != null)
             {
                 productos.Remove(producto);
+                Datos2.ActualizarProductos();
             }
         }
     }

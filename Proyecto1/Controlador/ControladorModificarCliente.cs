@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Proyecto1.Controlador
 {
-    internal class ControladorModificarCliente // Controlador para poder editar datos del cliente
+    public class ControladorModificarCliente // Controlador para poder editar datos del cliente
     {
         public void AgregarCliente (Cliente cliente)
         {

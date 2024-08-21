@@ -81,7 +81,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" @onclick="EliminarCliente">Eliminar Cliente</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="EliminarCliente">Eliminar Cliente</button>
             </div>
         </div>
     </div>
@@ -135,12 +135,20 @@
         </div>
     </div>
 </div>
+
+
 @code {
     private ControladorHistorialCliente controladorHistorialCliente;
     public List<Venta> facturas;
 
     [Parameter]
     public Cliente Cliente { get; set; }
+
+    [Parameter]
+    public EventCallback OnClienteEliminado { get; set; }
+
+    private ControladorCliente controladorCliente = new ControladorCliente();
+   
     protected override void OnInitialized()
     {
 
@@ -158,8 +166,11 @@
         // Lógica para guardar los cambios realizados en el cliente.
     }
 
-    private void EliminarCliente()
+    private async Task EliminarCliente()
     {
-        // Lógica para eliminar el cliente.
+        controladorCliente.EliminarCliente(Cliente.Id);
+        await OnClienteEliminado.InvokeAsync(); // Notifica al componente padre
+
+
     }
 }

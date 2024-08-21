@@ -2,6 +2,8 @@
 @rendermode InteractiveServer
 @using Proyecto1.Modelo
 @using Proyecto1.Controlador
+@using Proyectov2.Services
+@inject NavigationManager Navigation
 <h3>Ventas</h3>
 <br />
 
@@ -96,7 +98,7 @@
             </div>
         }
 
-        <!-- Aquí puedes agregar más contenido de la página -->
+
 
     </div>
     <div style="text-align: right; max-width: 300px; margin-left: auto;">
@@ -115,7 +117,7 @@
         </table>    
         
         <div style="text-align: left; margin-top: 10px;">
-            <button class="btn btn-success">Realizar Factura </button>
+            <button class="btn btn-success" @onclick="RealizarFactura">Realizar Factura</button>
         </div>
 
     </div>
@@ -125,7 +127,7 @@
 
 @code {
     double Total = 0;
-
+    [Inject] private CajeroService cajeroService { get; set; }
     private List<Cliente> clientes { get; set; }
     private ControladorCliente controladorCliente;
     private List<Producto> productos { get; set; }
@@ -207,6 +209,15 @@
             Total = Total + preventa.Total;
         }
     }
+    private void RealizarFactura()
+    {
+        Cajero cajero = cajeroService.GetCajeroActual();
+        Cliente clienteSeleccionadoObjeto = controladorVenta.getCliente(clienteSeleccionado);
+        MetodoPago.TipoPago metodoPago = selectedPaymentOption;
+        controladorVenta.RealizarVenta(clienteSeleccionadoObjeto, cajero, metodoPago);
+        Navigation.NavigateTo("/reportes");
+    }
+
 
 }
 <style>

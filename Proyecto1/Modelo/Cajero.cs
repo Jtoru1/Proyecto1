@@ -22,5 +22,6 @@ namespace Proyecto1.Modelo
         }
 
         public Cajero() { } 
+
     }
 }

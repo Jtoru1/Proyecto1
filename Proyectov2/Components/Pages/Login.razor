@@ -1,8 +1,8 @@
 ﻿@page "/"
-
- @* @using Proyectov2.Services;
-@inject AuthService authService *@
+@rendermode InteractiveServer
+@using Proyectov2.Services;
 @using Proyecto1.Controlador
+@using Proyecto1.Modelo
 @* @inject LoginController loginController *@
 @inject NavigationManager Navigation
 
@@ -10,28 +10,55 @@
     <div class="login-triangle"></div>
     <h2 class="login-header">Iniciar Sesión</h2>
 
-    <EditForm Model="loginModel" OnValidSubmit="HandleValidSubmit" FormName="LoginForm">
+    <EditForm Model="loginModel" OnValidSubmit="HandleValidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
         <div class="login-container">
             <p><InputText @bind-Value="loginModel.Correo" type="email" placeholder="Correo"></InputText></p>
             <p><InputText @bind-Value="loginModel.Contrasena" type="password" placeholder="Contraseña"></InputText></p>
-            <p><button type="submit">Ingresar</button></p>
+            
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="text-danger">@errorMessage</div>
+            }
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Ingresar</button>
+            </div>
         </div>
     </EditForm>
 </div>
 
 @code {
+    [Inject] private CajeroService cajeroService { get; set; }
+    private string errorMessage;
     private LoginModel loginModel = new LoginModel();
-
+    private LoginController loginController = new LoginController();
     private void HandleValidSubmit()
-    {
-        // Aquí puedes agregar la lógica de autenticación
-        // Si la autenticación es exitosa:
-        Navigation.NavigateTo("/home");
-    }
 
+    {
+        try
+        {
+
+            bool loginSuccessfull = loginController.autenticarUsuario(loginModel.Correo,loginModel.Contrasena);
+            if (!loginSuccessfull)
+            {
+                errorMessage = "Correo o contraseña incorrectos.";
+            }
+            else
+            {
+                Cajero cajeroActual = loginController.obtenerCajero(loginModel.Correo);
+                loginController.setCajeroActual(cajeroActual);
+                cajeroService.SetCajeroActual(cajeroActual);
+                Navigation.NavigateTo("/ventas");
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Ocurrió un error inesperado. Por favor, intenta nuevamente.";
+        }
+    }
     public class LoginModel
     {
         public string Correo { get; set; }
@@ -42,42 +69,7 @@
 
  
 
-@* <div>
-    <label for="username">Usuario:</label>
-    <input id="username" @bind="username" />
 
-    <label for="password">Contraseña:</label>
-    <input id="password" type="password" @bind="password" />
-
-    <button @onclick="LoginCajero">Iniciar Sesión</button>
-</div>
-
-@if (loginFailed)
-{
-    <p style="color:red;">Usuario o contraseña incorrectos.</p>
-}
-@code {
-    private string username;
-    private string password;
-    private bool loginFailed;
-
-    private async Task LoginCajero()
-    {
-        // Utilizar el controlador para autenticar el usuario
-        bool isAuthenticated = loginController.autenticarUsuario(username, password);
-
-        if (isAuthenticated)
-        {
-            // Redirigir a la página principal después del inicio de sesión exitoso
-            Navigation.NavigateTo("/home");
-        }
-        else
-        {
-            // Mostrar mensaje de error
-            loginFailed = true;
-        }
-    }
-} *@
 <style>
     body {
         background: #456;
@@ -169,44 +161,4 @@
 
 </style> 
 
-@*           
- @inject AuthService authService
 
-<div class="login-container">
-    <h2>Iniciar Sesión</h2>
-    <EditForm Model="@loginModel" OnValidSubmit="@HandleLogin">
-        <div class="input-group">
-            <label for="username">Usuario:</label>
-            <InputText id="username" @bind-Value="loginModel.Username" required />
-        </div>
-        <div class="input-group">
-            <label for="password">Contraseña:</label>
-            <InputText id="password" @bind-Value="loginModel.Password" type="password" required />
-        </div>
-        <button type="submit">Iniciar Sesión</button>
-    </EditForm>
-</div>
-
-@code {
-    private LoginModel loginModel = new LoginModel();
-
-    private async Task HandleLogin()
-    {
-        bool isAuthenticated = await authService.LoginAsync(loginModel.Username, loginModel.Password);
-        if (isAuthenticated)
-        {
-            // Redirigir a la página principal después de una autenticación exitosa
-            Navigation.NavigateTo("/mainpage");
-        }
-        else
-        {
-            // Mostrar un mensaje de error si la autenticación falla
-        }
-    }
-
-    public class LoginModel
-    {
-        public string Username { get; set; }
-        public string Password { get; set; }
-    }
-}  *@

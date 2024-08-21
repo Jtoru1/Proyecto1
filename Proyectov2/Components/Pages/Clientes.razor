@@ -1,6 +1,7 @@
 ﻿@page "/clientes"
 @using Proyecto1.Modelo;
 @using Proyecto1.Controlador;
+@rendermode InteractiveServer
 <h3>Lista de Clientes</h3>
 <br />
 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarClienteModal">
@@ -8,13 +9,12 @@
 </button>
 <br />
 <br style="height:"/>
+
 @foreach (var cliente in clientes)
 {
-    <ClienteCard Cliente="cliente" />
+    <ClienteCard Cliente="cliente" OnClienteEliminado="OnClienteEliminado" />
 
 }
-
-
 
 <!-- Modal -->
 <div class="modal fade" id="agregarClienteModal" tabindex="-1" aria-labelledby="agregarClienteModalLabel" aria-hidden="true">
@@ -26,32 +26,41 @@
             </div>
             <div class="modal-body">
                 <!-- Formulario para agregar nuevo cliente -->
-                <form id="nuevoClienteForm">
+                <EditForm Model="@nuevoCliente" OnValidSubmit="GuardarCliente" FormName="nuevoClienteForm">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
                     <div class="mb-3">
                         <label for="nombre" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="nombre" placeholder="">
+                        <InputText class="form-control" id="nombre" @bind-Value="nuevoCliente.Nombre" />
+                        <ValidationMessage For="@(() => nuevoCliente.Nombre)" />
                     </div>
                     <div class="mb-3">
                         <label for="apellido" class="form-label">Apellido</label>
-                        <input type="text" class="form-control" id="apellido" placeholder="">
+                        <InputText class="form-control" id="apellido" @bind-Value="nuevoCliente.Apellido" />
+                        <ValidationMessage For="@(() => nuevoCliente.Apellido)" />
                     </div>
                     <div class="mb-3">
                         <label for="direccion" class="form-label">Dirección</label>
-                        <input type="text" class="form-control" id="direccion" placeholder="">
+                        <InputText class="form-control" id="direccion" @bind-Value="nuevoCliente.Direccion" />
+                        <ValidationMessage For="@(() => nuevoCliente.Direccion)" />
                     </div>
                     <div class="mb-3">
                         <label for="numero" class="form-label">Número</label>
-                        <input type="text" class="form-control" id="numero" placeholder="">
+                        <InputText class="form-control" id="numero" @bind-Value="nuevoCliente.Numero" />
+                        <ValidationMessage For="@(() => nuevoCliente.Numero)" />
                     </div>
                     <div class="mb-3">
                         <label for="correo" class="form-label">Correo</label>
-                        <input type="email" class="form-control" id="correo" placeholder="">
+                        <InputText type="email" class="form-control" id="correo" @bind-Value="nuevoCliente.Correo" />
+                        <ValidationMessage For="@(() => nuevoCliente.Correo)" />
                     </div>
-                </form>
+
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </EditForm>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="guardarCambios()">Guardar Cambios</button>
             </div>
         </div>
     </div>
@@ -59,16 +68,20 @@
 
 
 
+
+
 @code {
     private List<Cliente> clientes { get; set; }
     private ControladorCliente controladorCliente;
-
+    private ControladorModificarCliente controladorModificarCliente;
+    private Cliente nuevoCliente;
     protected override void OnInitialized()
     {
 
         controladorCliente = new ControladorCliente();
         clientes = controladorCliente.obtenerClientes();
-
+        controladorModificarCliente = new ControladorModificarCliente();
+        nuevoCliente = new Cliente();
     }
 
     private bool isModalVisible;
@@ -83,7 +96,20 @@
         isModalVisible = false;
     }
   
+    private void GuardarCliente()
+    {
+        controladorModificarCliente.AgregarCliente(nuevoCliente);
+        clientes = controladorCliente.obtenerClientes(); // Actualiza la lista de clientes
+        nuevoCliente = new Cliente();
+        StateHasChanged();
+        CloseModal(); // Cierra el modal después de guardar
 
+    }
+    private void OnClienteEliminado()
+    {
+
+        StateHasChanged();  // Forzar el renderizado del componente
+    }
 }
 <style>
     #btn-agregar-cliente {
