@@ -13,7 +13,7 @@ namespace Proyecto1.Controlador
     public class LoginController  // Controlador de inicio de sesión 
     {
         private string nombreArchivo = "UsuarioCajeros.csv"; // Archivo csv que contiene la información de los cajeros
-        private ControladorArchivo controladorArchivo = new ControladorArchivo();
+        public ControladorArchivo controladorArchivo = new ControladorArchivo();
         private List<Cajero> cajeros = Datos2.cajeros;
         private Cajero cajeroActual = null;
         public LoginController() { }

@@ -4,8 +4,7 @@
 @rendermode InteractiveServer
 
 <div class="card">
-    <div class="card-body">
-       
+    <div class="card-body">     
         <p class="card-text">
             <strong>ID:</strong> @Factura.Id<br />
             <strong>Método de pago:</strong> @Factura.MetodoPago<br />
@@ -16,28 +15,27 @@
            
         </ul>
         <li class="list-inline-item">
-            <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="@($"NCFacturaModal-{Factura.Id}")"
+            <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="@($"#NCFacturaModal-{Factura.Id}")"
                     <Icon Name="IconName.ArrowLeftSquareFill" /> Hacer Devolución de Factura
                 </button>
         </li>
     </div>
 </div>
-<div class="modal fade" id="@($"NCFacturaModal-{Factura.Id}")" tabindex="-1" aria-labelledby="historialComprasModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+<div class="modal fade" id="@($"NCFacturaModal-{Factura.Id}")" tabindex="-1" aria-labelledby="NCFacturaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="historialComprasModalLabel">Historial de Compras</h1>
+                <h1 class="modal-title fs-5" id="NCFacturaModalLabel">¿Desea realiza la devolución de la factura?</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <h1 > DEVOLUCIÓN  </h1>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Realizar Devolución</button>
             </div>
         </div>
     </div>
 </div>
+
 
 @code {
    

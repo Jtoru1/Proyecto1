@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Proyecto1.Datos
 {
+
     public static class Datos2
     {
         private static string nombreArchivo = "UsuarioCajeros.csv";
